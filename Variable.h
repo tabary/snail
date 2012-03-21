@@ -12,6 +12,8 @@ class Variable
  public :
   Variable(std::string name, Domain &domain); // The associated domain must be previously created
   
+  Domain &getDomain();
+
   friend std::ostream& operator<<(std::ostream &flux, const Variable &variable);
 };
 
