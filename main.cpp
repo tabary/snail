@@ -1,5 +1,6 @@
 #include "Domain.h"
 #include "Variable.h"
+#include "Relation.h"
 
 #include <iostream>
 
@@ -32,12 +33,9 @@ int main()
   cout << v4 << endl ;
   cout << v5 << endl ;
 
-  // vector<int> const &tmp = d0.getInitialDomain();
-  // for (int i=0; i< tmp.size(); i++)
-  //   cout << tmp[i];
-   
-  // vector<int> const &tmp1 = d0.getCurrentDomain();
-  // for (int i=0; i< tmp1.size(); i++)
-  //   cout << tmp1[i]; 
+  Relation r0("R0");
+  r0.addTuple();
+  r0.addTuple();
+  r0.addTuple();
   return 0;
 }

@@ -9,7 +9,7 @@ EXEC=snail
 
 all: $(EXEC)
 
-$(EXEC): main.o Domain.o Variable.o
+$(EXEC): main.o Domain.o Variable.o Relation.o
 	$(CPP) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 main.o: Domain.h Variable.h
