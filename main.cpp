@@ -1,4 +1,6 @@
 #include "Domain.h"
+#include "Variable.h"
+
 #include <iostream>
 
 using namespace std;
@@ -15,6 +17,13 @@ int main()
   cout << d0 << endl ;
   cout << d1 << endl ;
   cout << d2 << endl ;
+
+  Variable v0("V0", d0);
+  Variable v1("V1", d1);
+
+  cout << v0 << endl ;
+  cout << v1 << endl ;
+
 
   // vector<int> const &tmp = d0.getInitialDomain();
   // for (int i=0; i< tmp.size(); i++)
