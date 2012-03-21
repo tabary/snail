@@ -33,9 +33,26 @@ int main()
   cout << v4 << endl ;
   cout << v5 << endl ;
 
-  Relation r0("R0");
-  r0.addTuple();
-  r0.addTuple();
-  r0.addTuple();
+  Relation r0("R0",2);
+  tuple myTuple= new int[2];
+  myTuple[0]=1; myTuple[1]=0; r0.addTuple(myTuple);
+  myTuple[0]=1; myTuple[1]=2; r0.addTuple(myTuple);
+  myTuple[0]=1; myTuple[1]=7; r0.addTuple(myTuple);
+  myTuple[0]=2; myTuple[1]=0; r0.addTuple(myTuple);
+  myTuple[0]=2; myTuple[1]=1; r0.addTuple(myTuple);
+  myTuple[0]=2; myTuple[1]=5; r0.addTuple(myTuple);
+
+  // TODO Definition of r1 relation of Hanoi3 problem
+
+  Relation r2("R2",2);
+  myTuple[0]=19; myTuple[1]=25; r2.addTuple(myTuple);
+  myTuple[0]=21; myTuple[1]=24; r2.addTuple(myTuple);
+  myTuple[0]=24; myTuple[1]=25; r2.addTuple(myTuple);
+  myTuple[0]=25; myTuple[1]=24; r2.addTuple(myTuple);
+  myTuple[0]=26; myTuple[1]=24; r2.addTuple(myTuple);
+  myTuple[0]=26; myTuple[1]=25; r2.addTuple(myTuple);
+
+  cout << r0 << endl;
+  cout << r2 << endl;
   return 0;
 }
