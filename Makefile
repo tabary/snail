@@ -9,10 +9,10 @@ EXEC=snail
 
 all: $(EXEC)
 
-$(EXEC): main.o
+$(EXEC): main.o Domain.o
 	$(CPP) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-#main.o: Etudiant.h Professeur.h
+main.o: Domain.h
 
 %.o: %.c
 	$(CPP) -o $@ -c $< $(CXXFLAGS)
