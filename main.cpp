@@ -1,6 +1,5 @@
-#include "Domain.h"
 #include "Variable.h"
-#include "Relation.h"
+#include "Constraint.h"
 
 #include <iostream>
 
@@ -54,5 +53,20 @@ int main()
 
   cout << r0 << endl;
   cout << r2 << endl;
+
+   Variable** scp= new Variable*[2];
+  scp[0]=&v0; scp[1]=&v1; Constraint c0("C0", 2, scp, r0);
+  scp[0]=&v1; scp[1]=&v2; Constraint c1("C1", 2, scp, r0);
+  scp[0]=&v2; scp[1]=&v3; Constraint c2("C2", 2, scp, r0);
+  scp[0]=&v3; scp[1]=&v4; Constraint c3("C3", 2, scp, r0);
+  scp[0]=&v4; scp[1]=&v5; Constraint c4("C4", 2, scp, r2);
+
+  cout << c0 << endl;
+  cout << c1 << endl;
+  cout << c2 << endl;
+  cout << c3 << endl;
+  cout << c4 << endl;
+  
+
   return 0;
 }

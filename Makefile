@@ -9,11 +9,12 @@ EXEC=snail
 
 all: $(EXEC)
 
-$(EXEC): main.o Domain.o Variable.o Relation.o
+$(EXEC): main.o Domain.o Variable.o Relation.o Constraint.o
 	$(CPP) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-main.o: Domain.h Variable.h
+main.o: Variable.h Constraint.h
 Variable.o: Domain.h
+Constraint.o: Relation.h
 
 %.o: %.c
 	$(CPP) -o $@ -c $< $(CXXFLAGS)
