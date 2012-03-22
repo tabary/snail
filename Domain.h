@@ -17,6 +17,10 @@ class Domain
   std::vector<int> const &getInitialDomain() const;
   std::vector<int> const &getCurrentDomain() const;
 
+  int getValueOfIndex(int index);
+
+  void reduceToIndexAtDepth(int valueIndex, int depth);
+
   friend std::ostream& operator<<(std::ostream &flux, const Domain &domain);
 };
 

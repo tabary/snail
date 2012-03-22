@@ -16,6 +16,10 @@ class Problem
   void addVariable(Variable *variable);
   void addConstraint(Constraint *constraint);
 
+  Variable &getVariable(int variableIndex);
+
+  int getFirstUnassignedVariable();
+
   void display();
 
 };

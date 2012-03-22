@@ -21,6 +21,20 @@ vector<int> const &Domain::getCurrentDomain() const
   return d_currentDomain;
 }
 
+int Domain::getValueOfIndex(int index)
+{
+  assert(index < (int)d_initialDomain.size() && index >= 0);
+  return d_initialDomain[index];
+}
+
+
+void Domain::reduceToIndexAtDepth(int indexValue, int depth)
+{
+  for(int i=0; i<(int)d_currentDomain.size(); i++)
+    if (d_currentDomain[i] == -1 && i != indexValue)
+      d_currentDomain[i] = depth;
+}
+
 
 ostream& operator<<(ostream &flux, const Domain &domain)
 {

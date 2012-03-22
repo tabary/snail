@@ -9,11 +9,15 @@ class Variable
   std::string d_name; 
   Domain &d_domain;
 
+  bool assigned;
+
  public :
   Variable(std::string name, Domain &domain); // The associated domain must be previously created
   
   Domain &getDomain();
   std::string  &getName() ; 
+  bool isAssigned();
+  void setAssigned(bool a);
 
   friend std::ostream& operator<<(std::ostream &flux, const Variable &variable);
 };

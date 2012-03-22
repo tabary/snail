@@ -19,17 +19,29 @@ void Problem::addConstraint(Constraint *constraint)
   d_constraintsCollection.push_back(constraint);
 }
 
+Variable &Problem::getVariable(int variableIndex)
+{
+  return *(d_variablesCollection[variableIndex]);
+}
+
+int Problem::getFirstUnassignedVariable()
+{
+ for(unsigned int i=0; i < d_variablesCollection.size(); i++)
+   if (!d_variablesCollection[i]->isAssigned())
+     return i;
+   assert(false);
+   return -1;
+}
+
 void Problem::display()
 {
   cout << "************** DISPLAY PROBLEM ************" << endl;
-  for(int i=0; i < d_variablesCollection.size(); i++){
+  for(unsigned int i=0; i < d_variablesCollection.size(); i++){
     cout << *(d_variablesCollection[i]) << endl;
   }
-  for(int i=0; i < d_constraintsCollection.size(); i++){
+  for(unsigned int i=0; i < d_constraintsCollection.size(); i++){
     cout << *(d_constraintsCollection[i]) << endl;
   }
-
-
 }
 
 
