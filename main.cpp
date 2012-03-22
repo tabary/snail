@@ -1,5 +1,4 @@
-#include "Variable.h"
-#include "Constraint.h"
+#include "Problem.h"
 
 #include <iostream>
 
@@ -10,14 +9,14 @@ int main()
 
   cout << "Hello from SnaiL \n";
 
+
+  Problem p;
+
+
   Domain d0("D0", 1, 2);
   Domain d1("D1", 0, 26);
   Domain d2("D2", 24, 25);
 
-  cout << d0 << endl ;
-  cout << d1 << endl ;
-  cout << d2 << endl ;
-  
   Variable v0("V0", *(new Domain(d0)));
   Variable v1("V1", *(new Domain(d1)));
   Variable v2("V2", *(new Domain(d1)));
@@ -25,12 +24,11 @@ int main()
   Variable v4("V4", *(new Domain(d1)));
   Variable v5("V5", *(new Domain(d2)));
 
-  cout << v0 << endl ;
-  cout << v1 << endl ;
-  cout << v2 << endl ;
-  cout << v3 << endl ;
-  cout << v4 << endl ;
-  cout << v5 << endl ;
+  p.addVariable(&v0);
+  p.addVariable(&v1);
+  p.addVariable(&v2);
+  p.addVariable(&v3);
+  p.addVariable(&v4);
 
   Relation r0("R0",2);
   tuple myTuple= new int[2];
@@ -51,22 +49,20 @@ int main()
   myTuple[0]=26; myTuple[1]=24; r2.addTuple(myTuple);
   myTuple[0]=26; myTuple[1]=25; r2.addTuple(myTuple);
 
-  cout << r0 << endl;
-  cout << r2 << endl;
-
-   Variable** scp= new Variable*[2];
+  Variable** scp= new Variable*[2];
   scp[0]=&v0; scp[1]=&v1; Constraint c0("C0", 2, scp, r0);
-  scp[0]=&v1; scp[1]=&v2; Constraint c1("C1", 2, scp, r0);
-  scp[0]=&v2; scp[1]=&v3; Constraint c2("C2", 2, scp, r0);
-  scp[0]=&v3; scp[1]=&v4; Constraint c3("C3", 2, scp, r0);
+  scp[0]=&v1; scp[1]=&v2; Constraint c1("C1", 2, scp, r0); // TODO Modify relation r1 for constraint
+  scp[0]=&v2; scp[1]=&v3; Constraint c2("C2", 2, scp, r0); // TODO Modify relation r1 for constraint
+  scp[0]=&v3; scp[1]=&v4; Constraint c3("C3", 2, scp, r0); // TODO Modify relation r1 for constraint
   scp[0]=&v4; scp[1]=&v5; Constraint c4("C4", 2, scp, r2);
 
-  cout << c0 << endl;
-  cout << c1 << endl;
-  cout << c2 << endl;
-  cout << c3 << endl;
-  cout << c4 << endl;
+  p.addConstraint(&c0);
+  p.addConstraint(&c1);
+  p.addConstraint(&c2);
+  p.addConstraint(&c3);
+  p.addConstraint(&c4);
   
+  p.display();
 
   return 0;
 }
