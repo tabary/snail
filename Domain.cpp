@@ -27,6 +27,15 @@ int Domain::getValueOfIndex(int index)
   return d_initialDomain[index];
 }
 
+int Domain::getFirstPresentIndex()
+{
+  for(int i=0; i<d_currentDomain.size(); i++)
+    if (d_currentDomain[i]==-1)
+      return i;
+  assert(false);
+  return -1;
+}
+
 
 void Domain::reduceToIndexAtDepth(int indexValue, int depth)
 {

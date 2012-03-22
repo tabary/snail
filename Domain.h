@@ -18,6 +18,7 @@ class Domain
   std::vector<int> const &getCurrentDomain() const;
 
   int getValueOfIndex(int index);
+  int getFirstPresentIndex();
 
   void reduceToIndexAtDepth(int valueIndex, int depth);
 

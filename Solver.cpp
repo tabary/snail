@@ -34,7 +34,7 @@ void Solver::doSearch()
   int valueIndex(0);
   while(!fullExploration){
     variableIndex = d_problem.getFirstUnassignedVariable();
-    //   valueIndex= d_problem.getVariable(variableIndex).getDomain().getFirstIndex();
+    valueIndex= d_problem.getVariable(variableIndex).getDomain().getFirstPresentIndex();
     depth++;
     doAssignmentAtCurrentDepth(variableIndex,valueIndex,depth);
   }
