@@ -1,4 +1,4 @@
-#include "Problem.h"
+#include "Solver.h"
 
 #include <iostream>
 
@@ -63,6 +63,9 @@ int main()
   p.addConstraint(&c4);
   
   p.display();
+
+  Solver s(p);
+  s.doSearch();
 
   return 0;
 }
