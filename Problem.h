@@ -16,8 +16,9 @@ class Problem
   void addVariable(Variable *variable);
   void addConstraint(Constraint *constraint);
 
-  Variable &getVariable(int variableIndex);
+  std::vector <Constraint *> const &getConstraintsCollection() const;
 
+  Variable &getVariable(int variableIndex);
   int getFirstUnassignedVariable();
 
   void display();

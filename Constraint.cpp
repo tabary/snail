@@ -10,6 +10,20 @@ Constraint::Constraint(string name, int arity, Variable **scope, Relation const 
   memcpy(d_scope,scope,sizeof(scope[0])*d_arity);
 } 
 
+bool Constraint::isConsistent()
+{
+  tuple myTuple= new int[d_arity];
+  for(int i=0; i<d_arity; i++){
+    if (!d_scope[i]->isAssigned())
+      return true;
+    myTuple[i] = (d_scope[i]->getDomain()).getUniqueValue(); 
+  }
+  if (d_relation.isValid(myTuple))
+    return true;
+  return false;
+}
+
+
 ostream& operator<<(ostream &flux, const Constraint &constraint)
 { 
   flux << constraint.d_name << " [";

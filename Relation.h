@@ -14,10 +14,14 @@ class Relation
   std::vector<tuple> d_tuplesCollection;
   int d_tupleSize;
 
+  bool isEqual(tuple const t1, tuple const t2) const;
+
  public :
   Relation(std::string name, int tupleSize); 
   void addTuple(tuple const t);
  
+  bool isValid(tuple const t) const;
+
   friend std::ostream& operator<<(std::ostream &flux, const Relation &relation);
 
 };

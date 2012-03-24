@@ -15,6 +15,8 @@ class Constraint
  public :
   Constraint(std::string name, int arity, Variable **scope, Relation const &relation); // The associated domain must be previously created
   
+  bool isConsistent();
+
   friend std::ostream& operator<<(std::ostream &flux, const Constraint &constraint);
 };
 

@@ -7,9 +7,12 @@ CXXFLAGS =-Wall $(OPT)
 LDFLAGS=
 EXEC=snail
 
+SRC=$(wildcard *.cpp)
+OBJ=$(SRC:.cpp=.o)
+
 all: $(EXEC)
 
-$(EXEC): main.o Domain.o Variable.o Relation.o Constraint.o Problem.o Solver.o
+$(EXEC): $(OBJ)
 	$(CPP) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 main.o: Solver.h

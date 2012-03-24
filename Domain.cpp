@@ -3,7 +3,7 @@
 using namespace std;
 
 
-Domain::Domain(string name, int min, int max) : d_name(name)
+Domain::Domain(string name, int min, int max) : d_name(name), nbRemovals(0)
 {
   assert(max >= min);
   for(int i=min; i<= max; i++)
@@ -27,23 +27,50 @@ int Domain::getValueOfIndex(int index)
   return d_initialDomain[index];
 }
 
-int Domain::getFirstPresentIndex()
+int Domain::getFirstPresentIndex() const
 {
-  for(int i=0; i<d_currentDomain.size(); i++)
+  for(unsigned int i=0; i<d_currentDomain.size(); i++)
     if (d_currentDomain[i]==-1)
       return i;
   assert(false);
   return -1;
 }
 
+int Domain::getUniqueValue() const
+{
+  assert(nbRemovals == (int)d_currentDomain.size()-1);
+  for(int i=0; i<(int)d_currentDomain.size(); i++)
+    if (d_currentDomain[i] == -1)
+      return d_initialDomain[i];
+  assert(false);
+}
+
 
 void Domain::reduceToIndexAtDepth(int indexValue, int depth)
 {
   for(int i=0; i<(int)d_currentDomain.size(); i++)
-    if (d_currentDomain[i] == -1 && i != indexValue)
+    if (d_currentDomain[i] == -1 && i != indexValue){
       d_currentDomain[i] = depth;
+      nbRemovals++;
+    }
 }
 
+void Domain::removeIndex(int indexValue, int depth)
+{
+  assert(d_currentDomain[indexValue] == -1);
+  d_currentDomain[indexValue] = depth;
+  nbRemovals++;
+} 
+
+
+void Domain::restoreAllIndexAtDepth(int depth)
+{
+  for(int i=0; i<(int)d_currentDomain.size(); i++)
+    if (d_currentDomain[i] == depth){
+      d_currentDomain[i] = -1;
+      nbRemovals--;
+    }
+}
 
 ostream& operator<<(ostream &flux, const Domain &domain)
 {

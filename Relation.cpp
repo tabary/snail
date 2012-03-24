@@ -16,6 +16,25 @@ void Relation::addTuple(tuple const t)
   d_tuplesCollection.push_back(myTuple);
 }
 
+bool Relation::isEqual(tuple const t1, tuple const t2) const
+{
+  for(int j=0; j<d_tupleSize; j++){
+    if (t1[j] != t2[j])
+      return false;
+  }
+  return true;
+}
+
+bool Relation::isValid(tuple const t) const
+{
+  for(unsigned int i=0; i<d_tuplesCollection.size(); i++){
+    if (isEqual(d_tuplesCollection[i],t))
+      return true;
+  }
+  return false;
+}
+
+
 ostream& operator<<(ostream &flux, const Relation &relation)
 {
   flux << relation.d_name << ":" ;

@@ -19,6 +19,13 @@ void Problem::addConstraint(Constraint *constraint)
   d_constraintsCollection.push_back(constraint);
 }
 
+vector <Constraint *> const &Problem::getConstraintsCollection() const
+{
+  return d_constraintsCollection;
+}
+
+
+
 Variable &Problem::getVariable(int variableIndex)
 {
   return *(d_variablesCollection[variableIndex]);

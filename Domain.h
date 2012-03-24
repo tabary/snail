@@ -11,6 +11,7 @@ class Domain
   std::string d_name; 
   std::vector<int> d_initialDomain;
   std::vector<int> d_currentDomain;
+  int nbRemovals;
 
  public :
   Domain(std::string name, int min, int max); // Limits are included
@@ -18,9 +19,13 @@ class Domain
   std::vector<int> const &getCurrentDomain() const;
 
   int getValueOfIndex(int index);
-  int getFirstPresentIndex();
+  int getFirstPresentIndex() const;
+  int getUniqueValue() const;
 
   void reduceToIndexAtDepth(int valueIndex, int depth);
+  void removeIndex(int valueIndex, int depth);
+
+  void restoreAllIndexAtDepth(int depth);
 
   friend std::ostream& operator<<(std::ostream &flux, const Domain &domain);
 };
