@@ -31,6 +31,12 @@ Variable &Problem::getVariable(int variableIndex)
   return *(d_variablesCollection[variableIndex]);
 }
 
+int Problem::getNbVariables()
+{
+  return d_variablesCollection.size();
+}
+
+
 int Problem::getFirstUnassignedVariable()
 {
  for(unsigned int i=0; i < d_variablesCollection.size(); i++)

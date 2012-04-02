@@ -20,6 +20,7 @@ class Solver
 
   void doAssignmentAtCurrentDepth(int variableIndex, int valueIndex, int depth);
   void undoAssignment(int variableIndex, int valueIndex, int depth);
+  void undoRefutation(int variableIndex, int valueIndex, int depth);
   void tryRefutation(int variableIndex, int valueIndex, int depth);
 
  public :

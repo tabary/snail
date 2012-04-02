@@ -14,6 +14,8 @@ bool Constraint::isConsistent()
 {
   tuple myTuple= new int[d_arity];
   for(int i=0; i<d_arity; i++){
+    if (d_scope[i]->hasEmptyDomain())
+      return false;
     if (!d_scope[i]->isAssigned())
       return true;
     myTuple[i] = (d_scope[i]->getDomain()).getUniqueValue(); 

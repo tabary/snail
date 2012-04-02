@@ -2,10 +2,17 @@
 
 using namespace std;
 
+int Variable::nbAssigned = 0;
+
 
 Variable::Variable(string name, Domain &domain) : d_name(name), d_domain(domain), assigned(false)
 {
 } 
+
+int Variable::getNbAssigned()
+{
+  return nbAssigned;
+}
 
  
 Domain &Variable::getDomain()
@@ -26,6 +33,15 @@ bool Variable::isAssigned()
 void Variable::setAssigned(bool a)
 {
   assigned = a;
+  if (a==true)
+    nbAssigned++;
+  else 
+    nbAssigned--;
+}
+
+bool Variable::hasEmptyDomain()
+{
+  return (d_domain.getNbRemovals() == d_domain.getNbInitialValues());
 }
 
 ostream& operator<<(ostream &flux, const Variable &variable)

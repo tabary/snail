@@ -18,6 +18,9 @@ class Domain
   std::vector<int> const &getInitialDomain() const;
   std::vector<int> const &getCurrentDomain() const;
 
+  int const getNbRemovals();
+  int const getNbInitialValues();
+
   int getValueOfIndex(int index);
   int getFirstPresentIndex() const;
   int getUniqueValue() const;
@@ -26,6 +29,7 @@ class Domain
   void removeIndex(int valueIndex, int depth);
 
   void restoreAllIndexAtDepth(int depth);
+  void restoreUniqueIndexAtDepth(int index, int depth);
 
   friend std::ostream& operator<<(std::ostream &flux, const Domain &domain);
 };
