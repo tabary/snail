@@ -63,31 +63,6 @@ void Solver::tryRefutation(int variableIndex, int valueIndex, int depth)
   v.getDomain().removeIndex(valueIndex, depth); 
 }
 
-
-void Solver::backtrack(int &depth)
-{
-  decision d;
-  bool stop(false);
-
-  do {
-    d = decisionStack.top();
-    decisionStack.pop();
-      
-    if (d.polarity == false){
-      undoRefutation(d.variableIndex,d.valueIndex,depth--);
-    }
-    else{
-      undoAssignment(d.variableIndex,d.valueIndex,depth--);
-      d.polarity = false;
-      decisionStack.push(d);
-      tryRefutation(d.variableIndex,d.valueIndex,++depth);
-      if (checkConsistency()) stop = true;
-    }
-  }
-  while (!stop && !decisionStack.empty());
-}
-
-
 void Solver::doSearch()
 {
   cout << "************** BEGIN SEARCH ************" << endl;
@@ -100,22 +75,40 @@ void Solver::doSearch()
   decision d;
 
   bool fullExploration(false);
-  
+  bool stop;
+
   while(!fullExploration && Variable::getNbAssigned() < d_problem.getNbVariables()){
  
     variableIndex = d_problem.getFirstUnassignedVariable();
     valueIndex= d_problem.getVariable(variableIndex).getDomain().getFirstPresentIndex();
-    doAssignmentAtCurrentDepth(variableIndex,valueIndex,++depth);
+    doAssignmentAtCurrentDepth(variableIndex,valueIndex,depth++);
 
     d.polarity = true;
     d.variableIndex = variableIndex;
     d.valueIndex = valueIndex;
     decisionStack.push(d);
 
-    if (checkConsistency()) continue;
-    
-    backtrack(depth);
 
+    if (checkConsistency()) continue;
+    stop=false;
+    do {
+
+      d = decisionStack.top();
+      decisionStack.pop();
+      if (d.polarity == false){
+	depth--;
+	undoRefutation(d.variableIndex,d.valueIndex,depth);
+      }
+      else{
+	depth--;
+	undoAssignment(d.variableIndex,d.valueIndex,depth);
+	d.polarity = false;
+	decisionStack.push(d);
+	tryRefutation(d.variableIndex,d.valueIndex,depth++);
+	if (checkConsistency()) stop = true;
+      }
+    }
+    while (!stop && !decisionStack.empty());
     if (decisionStack.empty()) fullExploration=true;
   }
   

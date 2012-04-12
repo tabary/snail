@@ -23,8 +23,6 @@ class Solver
   void undoRefutation(int variableIndex, int valueIndex, int depth);
   void tryRefutation(int variableIndex, int valueIndex, int depth);
 
-  void backtrack(int &depth);
-
  public :
   Solver(Problem &problem);
 

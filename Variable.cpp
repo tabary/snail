@@ -5,7 +5,7 @@ using namespace std;
 int Variable::nbAssigned = 0;
 
 
-Variable::Variable(string name, Domain &domain) : d_name(name), d_domain(domain), weightedDegree(0), assigned(false)
+Variable::Variable(string name, Domain &domain) : d_name(name), d_domain(domain), assigned(false)
 {
 } 
 
@@ -37,11 +37,6 @@ void Variable::setAssigned(bool a)
     nbAssigned++;
   else 
     nbAssigned--;
-}
-
-void Variable::incrementWeightedDegree()
-{
-    weightedDegree++;
 }
 
 bool Variable::hasEmptyDomain()

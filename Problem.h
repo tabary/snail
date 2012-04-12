@@ -22,7 +22,7 @@ class Problem
   int getNbVariables();
 
   int getFirstUnassignedVariable();
-  
+
   void display();
 
 };

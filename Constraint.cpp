@@ -22,10 +22,6 @@ bool Constraint::isConsistent()
   }
   if (d_relation.isValid(myTuple))
     return true;
-  
-  for(int i=0; i < d_arity; i++)
-      d_scope[i]->incrementWeightedDegree();
-
   return false;
 }
 
