@@ -11,6 +11,8 @@ class Variable
 
   static int nbAssigned;
 
+  int weightedDegree;
+  
   bool assigned;
 
  public :
@@ -19,10 +21,13 @@ class Variable
   static int getNbAssigned();
 
   Domain &getDomain();
-  std::string  &getName() ; 
+  std::string  &getName() ;
+  
   bool isAssigned();
   void setAssigned(bool a);
 
+  void incrementWeightedDegree();
+  
   bool hasEmptyDomain();
 
   friend std::ostream& operator<<(std::ostream &flux, const Variable &variable);
