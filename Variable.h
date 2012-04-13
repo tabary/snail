@@ -20,6 +20,7 @@ class Variable
 
   Domain &getDomain();
   std::string  &getName() ; 
+ 
   bool isAssigned();
   void setAssigned(bool a);
 

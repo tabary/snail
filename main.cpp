@@ -1,10 +1,10 @@
 #include "Solver.h"
+#include "parser/MyParser.h"
 
-#include <iostream>
 
 using namespace std;
 
-int main()
+int main(int argc, char **argv)
 {
 
   cout << "Hello from SnaiL \n";
@@ -156,5 +156,33 @@ int main()
   Solver s(p);
   s.doSearch();
 
+   
+  MyCallback cb; // my interface between the parser and the solver
+
+  if (argc!=2)
+  {
+    cout << "syntax: " << argv[0] << " CSPFile.xml\n"
+	 << "  this program is a just a demonstration to illustrate how to use the CSP XML parser\n"
+	 << endl;
+    exit(1);
+  }
+
+  try
+  {
+    CSPXMLParser::XMLParser_libxml2<> parser(cb);
+
+    parser.setPreferredExpressionRepresentation(INFIX_C);
+
+    parser.parse(argv[1]); // parse the input file
+  }
+  catch (exception &e)
+  {
+    cout.flush();
+    cerr << "\n\tUnexpected exception :\n";
+    cerr << "\t" << e.what() << endl;
+    exit(1);
+  }
+
+ 
   return 0;
 }
