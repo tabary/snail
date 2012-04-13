@@ -7,12 +7,15 @@
 class Problem
 {
  private :
+     std::string d_name;
   std::vector <Variable*> d_variablesCollection;
   std::vector <Constraint *> d_constraintsCollection;
 
  public :
   Problem();
- 
+  
+  void setName(std::string name);
+  
   void addVariable(Variable *variable);
   void addConstraint(Constraint *constraint);
 

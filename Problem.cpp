@@ -9,6 +9,12 @@ Problem::Problem()
 {
 }
  
+void Problem::setName(string name)
+{
+    d_name = name;
+}
+
+
 void Problem::addVariable(Variable *variable)
 {
   d_variablesCollection.push_back(variable);
@@ -48,7 +54,7 @@ int Problem::getFirstUnassignedVariable()
 
 void Problem::display()
 {
-  cout << "************** DISPLAY PROBLEM ************" << endl;
+  cout << "************** DISPLAY PROBLEM " << d_name << " ************" << endl;
   for(unsigned int i=0; i < d_variablesCollection.size(); i++){
     cout << *(d_variablesCollection[i]) << endl;
   }

@@ -24,7 +24,7 @@
  */
 
 #include "include/XMLParser_libxml2.hh"
-
+#include "../Problem.h"
 using namespace CSPXMLParser;
 
 /*
@@ -49,79 +49,77 @@ private:
   bool firstDomainValue;
   bool firstTuple;
   string constraintReference;
-
+  Problem &d_problem;
+  
+  Domain** d_domainsCollection;
+  int d_nbDomains;
+  int d_currentDomain;
+  
+  Relation **d_relationsCollection;
+  int d_nbRelations;
+  int d_currentRelation;
+  
+  
+  
 public:
+    MyCallback(Problem &problem) : d_problem(problem), d_currentDomain(-1), d_nbDomains(0)
+    {  
+    }
+        
   virtual void beginInstance(const string & name)
   {
-    cout << "<instance>" << endl;
-    cout << "<presentation name='"
-	 << name << "'/>" << endl;
-  }
+      d_problem.setName(name);
+   }
 
   virtual void beginDomainsSection(int nbDomains) 
   {  
-    cout << "<domains nbDomains='" 
-	 << nbDomains << "'>" <<endl;
+      d_nbDomains = nbDomains;
+  d_domainsCollection = new Domain*[nbDomains];  
   }
   
   virtual void beginDomain(const string & name, int idDomain, int nbValue) 
   {
-    cout << " <domain name='" << name 
-	 << "' nbValues='" << nbValue << "'>";
-    firstDomainValue=true;
+    Domain * myDomain;
+    myDomain = new Domain(name);
+    d_domainsCollection[idDomain] = myDomain;
+    d_currentDomain = idDomain;
   }
 
   virtual void addDomainValue(int v) 
   {
-    if (!firstDomainValue)
-      cout << ' ';
-    firstDomainValue=false;
-
-    cout << v;
+      d_domainsCollection[d_currentDomain]->addValue(v);
   }
 
   virtual void addDomainValue(int first,int last) 
   {
-    if (!firstDomainValue)
-      cout << ' ';
-    firstDomainValue=false;
-
-    cout << first << ".." << last;
+      d_domainsCollection[d_currentDomain]->addIntervalValue(first,last);
   }
 
   virtual void endDomain() 
   {
-    cout << "</domain>" <<endl;
+      d_currentDomain = -1;
   }
 
-  /**
-   * end the definition of all domains
-   */
   virtual void endDomainsSection() 
-  {
-    cout << "</domains>" <<endl;
-  }
-
+  { }
 
   virtual void beginVariablesSection(int nbVariables) 
-  {
-    cout << "<variables nbVariables='"
-	 << nbVariables << "'>" <<endl;
-  }
+  { }
   
   virtual void addVariable(const string & name, int idVar,
 			   const string & domain, int idDomain) 
   {
-    cout << "<variable name='" << name
-	 << "' domain='" << domain 
-	 << "'/>" <<endl;
+   Domain  &d0 = *(d_domainsCollection[idDomain]);
+   Variable* v;
+   v = new Variable(name, *(new Domain(d0)), idVar);
+   d_problem.addVariable(v);
   }
 
   virtual void endVariablesSection() 
   {
-    cout << "</variables>" <<endl;
+      for(int i=0; i < d_nbDomains; i++)
+          delete d_domainsCollection[i];
   }
-
 
   virtual void beginRelationsSection(int nbRelations) 
   {
@@ -129,8 +127,7 @@ public:
 	 << "'>" <<endl;
   }
 
-  
-  virtual void beginRelation(const string & name, int idRel,
+    virtual void beginRelation(const string & name, int idRel,
 			     int arity, int nbTuples, RelType relType) 
   {
     cout << "<relation name='" << name 
@@ -419,23 +416,13 @@ public:
     cout << "  </constraint>" << endl;
   }
 
-  /**
-   * end the definition of all constraints
-   */
   virtual void endConstraintsSection() 
   {
     cout << "</constraints>" <<endl;
   }
 
-  /********************************************************************/
-
-
-  /**
-   * signal the end of parsing
-   */
   virtual void endInstance() 
   {
-    cout << "</instance>" <<endl;
   }
 
 };

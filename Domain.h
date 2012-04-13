@@ -15,6 +15,14 @@ class Domain
 
  public :
   Domain(std::string name, int min, int max); // Limits are included
+  Domain(std::string);
+  
+  void addValue(int v);
+  void addIntervalValue(int min, int max); // Limits are included
+  
+  
+  
+  
   std::vector<int> const &getInitialDomain() const;
   std::vector<int> const &getCurrentDomain() const;
 

@@ -11,6 +11,26 @@ Domain::Domain(string name, int min, int max) : d_name(name), nbRemovals(0)
   d_currentDomain.insert(d_currentDomain.begin(),d_initialDomain.size(),-1);
 } 
 
+Domain::Domain(string name) : d_name(name), nbRemovals(0)
+{
+}
+
+
+void Domain::addValue(int v)
+{
+    d_initialDomain.push_back(v);
+    d_currentDomain.push_back(-1);
+}
+
+void Domain::addIntervalValue(int min, int max)
+{
+    assert(max >= min);
+      for(int i=min; i<= max; i++){
+          d_initialDomain.push_back(i);
+          d_currentDomain.push_back(-1);
+      }
+}
+
 vector<int> const &Domain::getInitialDomain() const
 {
   return d_initialDomain;

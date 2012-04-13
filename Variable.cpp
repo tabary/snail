@@ -5,7 +5,7 @@ using namespace std;
 int Variable::nbAssigned = 0;
 
 
-Variable::Variable(string name, Domain &domain) : d_name(name), d_domain(domain), assigned(false)
+Variable::Variable(string name, Domain &domain, int variableId ) : d_name(name), d_domain(domain), assigned(false), d_variableId(variableId)
 {
 } 
 
