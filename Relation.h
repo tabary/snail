@@ -19,9 +19,12 @@ class Relation
  public :
   Relation(std::string name, int tupleSize); 
   void addTuple(tuple const t);
- 
+
   bool isValid(tuple const t) const;
 
+  std::string & getName(); 
+  
+  
   friend std::ostream& operator<<(std::ostream &flux, const Relation &relation);
 
 };

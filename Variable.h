@@ -19,7 +19,8 @@ class Variable
   Variable(std::string name, Domain &domain, int variableId = -1); // The associated domain must be previously created
   
   static int getNbAssigned();
-
+  static void setNbAssigned(int nb);
+  
   Domain &getDomain();
   std::string  &getName() ; 
  

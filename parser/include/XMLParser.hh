@@ -1197,7 +1197,7 @@ namespace CSPXMLParser
 	  const vector<string> &keyOrder=*conventionalKeyOrder;
 
 	  int i;
-	  for(i=0;i<stack.size()-base && i<keyOrder.size();++i)
+	  for(i=0;i<((int)stack.size())-base && i<(int)keyOrder.size();++i)
 	  {
 	    if (stack[base+i]->getType()!=SYMB_NIL)
 	      dict->setArg(keyOrder[i],stack[base+i]);
@@ -1208,7 +1208,7 @@ namespace CSPXMLParser
 	    }
 	  }
 
-	  if (i!=keyOrder.size())
+	  if (i!=(int)keyOrder.size())
 	    throw runtime_error("not enough values in dictionary defined with conventional order");
 
 	  assert(stack[base-1]==NULL);
@@ -1572,7 +1572,7 @@ namespace CSPXMLParser
 	if (reference.length()>7 && reference.substr(0,7)=="global:")
 	{
 	  // global constraints are case insensitive
-	  for(int i=0;i<reference.size();++i)
+	  for(int i=0;i<(int)reference.size();++i)
 	    reference[i]=tolower(reference[i]);
 	}
 
@@ -1634,7 +1634,7 @@ namespace CSPXMLParser
 	  delete args;
 	}
 	else
-	  if (this->parser->operandStack.size()==initialOperandStackSize)
+	  if ((int)this->parser->operandStack.size()==initialOperandStackSize)
 	  {
 	    // no parameter given to the constraint, pass the scope list
 	    this->parser->getCallback()->constraintParameters(scopeList);
@@ -2280,7 +2280,7 @@ namespace CSPXMLParser
 
     void clearOperandStack()
     {
-      for(int i=0;i<operandStack.size();++i)
+      for(int i=0;i<(int)operandStack.size();++i)
 	delete operandStack[i];
 
       operandStack.clear();

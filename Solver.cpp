@@ -77,6 +77,8 @@ void Solver::doSearch()
   bool fullExploration(false);
   bool stop;
 
+  Variable::setNbAssigned(0);
+  
   while(!fullExploration && Variable::getNbAssigned() < d_problem.getNbVariables()){
  
     variableIndex = d_problem.getFirstUnassignedVariable();

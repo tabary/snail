@@ -1,48 +1,8 @@
-/*=============================================================================
- * parser for CSP instances represented in XML format
- * 
- * Copyright (c) 2008 Olivier ROUSSEL (olivier.roussel <at> cril.univ-artois.fr)
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *=============================================================================
- */
 
 #include "include/XMLParser_libxml2.hh"
 #include "../Problem.h"
 using namespace CSPXMLParser;
 
-/*
- * A simple demo to illustrate how to use the XML CSP parser 
- */
-
-
-/**
- * The methods of this class will be called by the XML parser to
- * report the elements of the definition of the CSP instance to your
- * own solver.
- *
- * This sample callback merely prints the data it receives. You must
- * modify it to transmit the informations to your solver.
- *
- * The description of each method can be found in
- * C++/include/CSPParserCallback.hh
- */
 class MyCallback : public CSPParserCallback
 {
 private:
@@ -62,7 +22,8 @@ private:
   
   
 public:
-    MyCallback(Problem &problem) : d_problem(problem), d_currentDomain(-1), d_nbDomains(0)
+    MyCallback(Problem &problem) : d_problem(problem), d_nbDomains(0), d_currentDomain(-1),
+                                                       d_nbRelations(0), d_currentRelation(0)
     {  
     }
         
@@ -123,68 +84,56 @@ public:
 
   virtual void beginRelationsSection(int nbRelations) 
   {
-    cout << "<relations nbRelations='" << nbRelations 
-	 << "'>" <<endl;
+      d_nbRelations = nbRelations;
+      d_relationsCollection = new Relation*[d_nbRelations];
+      d_currentRelation = -1;
   }
 
     virtual void beginRelation(const string & name, int idRel,
 			     int arity, int nbTuples, RelType relType) 
   {
-    cout << "<relation name='" << name 
-	 << "' arity='" << arity << "' nbTuples='"
-	 << nbTuples << "' semantics='";
-
+       
+        Relation * myRelation;
+        myRelation = new Relation(name, arity);
+            
     switch(relType)
     {
     case REL_SUPPORT:
       cout << "supports";
       break;
     case REL_CONFLICT:
-      cout << "conflicts";
+    throw runtime_error("Not Implemented");
+        // TODO
       break;
     case REL_SOFT:
-      cout << "soft";
+           throw runtime_error("Not Supported");
       break;
     default:
       throw runtime_error("unknown relation type");
     }
-
-    cout << "'>";
-    firstTuple=true;
+    d_currentRelation = idRel;
+    d_relationsCollection[idRel] = myRelation;
   }
 
   virtual void addRelationTuple(int arity, int tuple[]) 
   {      
-    if (!firstTuple)
-      cout << '|';
-
-    firstTuple=false;
-
-    cout << tuple[0];
-    for(int i=1;i<arity;++i)
-      cout << ' ' << tuple[i];
+            d_relationsCollection[d_currentRelation]->addTuple(tuple);
+      
   }
 
   virtual void addRelationTuple(int arity, int tuple[], int cost) 
   {      
-    if (!firstTuple)
-      cout << '|';
-
-    firstTuple=false;
-
-    cout << cost << ":" << tuple[0];
-    for(int i=1;i<arity;++i)
-      cout << ' ' << tuple[i];
+  throw runtime_error("Not Supported");
+      // NOT IMPLEMENTED
   }
 
   virtual void endRelation() 
   {
-    cout << "</relation>" <<endl;
+  
   }
 
   virtual void endRelationsSection() 
   {
-    cout << "</relations>" <<endl;
   }
 
   virtual void beginPredicatesSection(int nbPredicates) 
@@ -230,9 +179,22 @@ public:
 
   virtual void beginConstraintsSection(int nbConstraints) 
   {
-    cout << "<constraints nbConstraints='"
-	 << nbConstraints << "'>" <<endl;
+ 
   }
+  
+  
+  Relation &getRelation(const string &reference)
+  {
+      for(int i=0; i< d_nbRelations; ++i)
+      {
+          if (d_relationsCollection[i]->getName() == reference)
+              return *(d_relationsCollection[i]);
+      }   
+       throw runtime_error("Unreachable code");
+  }
+  
+  
+  
   
   virtual void beginConstraint(const string & name, int idConstr,
 			       int arity, 
@@ -240,19 +202,17 @@ public:
 			       CSPDefinitionType type, int id,
 			       const ASTList &scope)
   {
-    cout << "  <constraint name='" << name
-	 << "' arity='" << arity 
-	 << "' scope='";
-
-    if (scope.size())
-      cout << scope[0].getVarName();
-
-    for(int i=1;i<scope.size();++i)
-      cout << ' ' << scope[i].getVarName();
-
-    cout << "' reference='" << reference 
-	 << "'>" << endl;
-
+   
+       Variable** scp= new Variable*[arity];
+//  scp[0]=&v0; scp[1]=&v1; Constraint c0("C0", 2, scp, r0);
+      
+          for(int i=0;i<scope.size();++i)
+              scp[i] =  &(d_problem.getVariable(scope[i].getVarId()));
+      
+    Constraint* c;
+         c = new Constraint(name, arity, scp, getRelation(reference));
+         d_problem.addConstraint(c);
+     
     constraintReference=reference;
   }
 

@@ -5,13 +5,18 @@ using namespace std;
 int Variable::nbAssigned = 0;
 
 
-Variable::Variable(string name, Domain &domain, int variableId ) : d_name(name), d_domain(domain), assigned(false), d_variableId(variableId)
+Variable::Variable(string name, Domain &domain, int variableId ) : d_name(name), d_variableId(variableId), d_domain(domain), assigned(false)
 {
 } 
 
 int Variable::getNbAssigned()
 {
   return nbAssigned;
+}
+
+void Variable::setNbAssigned(int nb)
+{
+    nbAssigned = nb;
 }
 
  

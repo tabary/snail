@@ -35,6 +35,14 @@ bool Relation::isValid(tuple const t) const
 }
 
 
+string&  Relation::getName()
+{
+    return d_name;
+}
+
+
+
+
 ostream& operator<<(ostream &flux, const Relation &relation)
 {
   flux << relation.d_name << ":" ;
