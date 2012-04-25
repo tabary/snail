@@ -3,127 +3,117 @@
 using namespace std;
 
 
-Domain::Domain(string name, int min, int max) : d_name(name), nbRemovals(0)
+Domain::Domain(const string &name, int min, int max) : _name(name), _nbRemovals(0)
 {
   assert(max >= min);
-  for(int i=min; i<= max; i++)
-    d_initialDomain.push_back(i);
-  d_currentDomain.insert(d_currentDomain.begin(),d_initialDomain.size(),-1);
+  for(int i=min; i<= max; ++i)
+    _initialDomain.push_back(i);
+  _currentDomain.insert(_currentDomain.begin(),_initialDomain.size(),-1);
 } 
 
-Domain::Domain(string name) : d_name(name), nbRemovals(0)
+Domain::Domain(const string &name) : _name(name), _nbRemovals(0)
 {
 }
 
-
 void Domain::addValue(int v)
 {
-    d_initialDomain.push_back(v);
-    d_currentDomain.push_back(-1);
+    _initialDomain.push_back(v);
+    _currentDomain.push_back(-1);
 }
 
 void Domain::addIntervalValue(int min, int max)
 {
     assert(max >= min);
       for(int i=min; i<= max; i++){
-          d_initialDomain.push_back(i);
-          d_currentDomain.push_back(-1);
+          _initialDomain.push_back(i);
+          _currentDomain.push_back(-1);
       }
 }
 
 vector<int> const &Domain::getInitialDomain() const
 {
-  return d_initialDomain;
+  return _initialDomain;
 }
 
 vector<int> const &Domain::getCurrentDomain() const
 {
-  return d_currentDomain;
+  return _currentDomain;
 }
 
-
-int const Domain::getNbRemovals()
+int Domain::getNbRemovals() const
 {
-  return nbRemovals;
+  return _nbRemovals;
 }
 
-int const Domain::getNbInitialValues()
+int Domain::getNbInitialValues() const
 {
-  return d_initialDomain.size();
+  return _initialDomain.size();
 }
 
-int Domain::getValueOfIndex(int index)
+int Domain::getValueOfIndex(int index) const
 {
-  assert(index < (int)d_initialDomain.size() && index >= 0);
-  return d_initialDomain[index];
+  assert(index < (int)_initialDomain.size() && index >= 0);
+  return _initialDomain[index];
 }
 
-int Domain::getFirstPresentIndex() const
+int Domain::getFirstPresent() const
 {
-  for(unsigned int i=0; i<d_currentDomain.size(); i++)
-    if (d_currentDomain[i]==-1)
+  for(unsigned int i=0; i<_currentDomain.size(); ++i)
+    if (_currentDomain[i]==-1)
       return i;
-  assert(false);
-  return -1;
+  throw("Unreachable Code");
 }
 
-int Domain::getUniqueValue() const
+int Domain::getUniquePresent() const
 {
-  assert(nbRemovals == (int)d_currentDomain.size()-1);
-#ifdef TMPDEBUG
-  int cpt(0);
-  for(int i=0; i<(int)d_currentDomain.size(); i++)
-    if (d_currentDomain[i] == -1) cpt++;
-  assert(cpt == 1);
-#endif
-  for(int i=0; i<(int)d_currentDomain.size(); i++)
-    if (d_currentDomain[i] == -1)
-      return d_initialDomain[i];
-  assert(false);
+  assert(_nbRemovals == (int)_currentDomain.size()-1);
+  for(int i=0; i<(int)_currentDomain.size(); ++i)
+    if (_currentDomain[i] == -1)
+      return _initialDomain[i];
+  throw("Unreachable Code");
 }
-
 
 void Domain::reduceToIndexAtDepth(int indexValue, int depth)
 {
-  for(int i=0; i<(int)d_currentDomain.size(); i++)
-    if (d_currentDomain[i] == -1 && i != indexValue){
-      d_currentDomain[i] = depth;
-      nbRemovals++;
+  for(int i=0; i<(int)_currentDomain.size(); ++i)
+    if (_currentDomain[i] == -1 && i != indexValue){
+      _currentDomain[i] = depth;
+      _nbRemovals++;
     }
 }
 
-void Domain::removeIndex(int indexValue, int depth)
+void Domain::removeIndexAtDepth(int indexValue, int depth)
 {
-  assert(d_currentDomain[indexValue] == -1);
-  d_currentDomain[indexValue] = depth;
-  nbRemovals++;
+  assert(_currentDomain[indexValue] == -1);
+  _currentDomain[indexValue] = depth;
+  _nbRemovals++;
 } 
 
 
 void Domain::restoreAllIndexAtDepth(int depth)
 {
-  for(int i=0; i<(int)d_currentDomain.size(); i++)
-    if (d_currentDomain[i] == depth){
-      d_currentDomain[i] = -1;
-      nbRemovals--;
+  for(int i=0; i<(int)_currentDomain.size(); ++i)
+    if (_currentDomain[i] == depth){
+      _currentDomain[i] = -1;
+      _nbRemovals--;
     }
 }
 
 void Domain::restoreUniqueIndexAtDepth(int index, int depth)
 {
-  assert (d_currentDomain[index] == depth);
-  d_currentDomain[index] = -1;
-  nbRemovals--;
+  assert (_currentDomain[index] == depth);
+  _currentDomain[index] = -1;
+  _nbRemovals--;
 }
 
 
 ostream& operator<<(ostream &flux, const Domain &domain)
 {
-  assert(domain.d_currentDomain.size()!=0);
-  flux << domain.d_name << ":[" ;
-  for (unsigned int i=0; i<domain.d_currentDomain.size(); i++){
-    flux << domain.d_currentDomain[i] ;
-    flux << (i!=domain.d_currentDomain.size()-1 ? "," : "") ;
+  assert(domain._currentDomain.size()!=0);
+  flux << domain._name << ":[" ;
+  for (unsigned int i=0; i<domain._currentDomain.size(); ++i){
+    flux << domain._currentDomain[i] ;
+    flux << (i!=domain._currentDomain.size()-1 ? "," : "") ;
   }
   flux << "]" ;
   return flux;

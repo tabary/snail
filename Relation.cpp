@@ -3,22 +3,33 @@
 using namespace std;
 
 
-Relation::Relation(string name, int tupleSize) : d_name(name), d_tupleSize(tupleSize)
+Relation::Relation(const string &name, int tupleSize, int relType) : _name(name), _tupleSize(tupleSize)
 {
-  assert(d_tupleSize > 0);
+  assert(_tupleSize > 0);
+   switch(relType)
+    {
+    case 0:
+        _relType = REL_SUPPORT;
+        break;
+    case 1:
+        _relType = REL_CONFLICT;
+        break;
+    default:
+      throw ("unknown relation type");
+    }
 } 
 
 void Relation::addTuple(tuple const t)
 {
-  assert(t != NULL && d_tupleSize > 0);
-  tuple myTuple= new int[d_tupleSize];
-  memcpy(myTuple,t,sizeof(t[0])*d_tupleSize);
-  d_tuplesCollection.push_back(myTuple);
+  assert(t != NULL && _tupleSize > 0);
+  tuple myTuple= new int[_tupleSize];
+  memcpy(myTuple,t,sizeof(t[0])*_tupleSize);
+  _tuplesCollection.push_back(myTuple);
 }
 
 bool Relation::isEqual(tuple const t1, tuple const t2) const
 {
-  for(int j=0; j<d_tupleSize; j++){
+  for(int j=0; j<_tupleSize; ++j){
     if (t1[j] != t2[j])
       return false;
   }
@@ -27,31 +38,32 @@ bool Relation::isEqual(tuple const t1, tuple const t2) const
 
 bool Relation::isValid(tuple const t) const
 {
-  for(unsigned int i=0; i<d_tuplesCollection.size(); i++){
-    if (isEqual(d_tuplesCollection[i],t))
+    return (_relType == REL_SUPPORT ? isPresent(t) : !isPresent(t));    
+}
+
+bool Relation::isPresent(tuple const t) const
+{
+  for(unsigned int i=0; i<_tuplesCollection.size(); ++i){
+    if (isEqual(_tuplesCollection[i],t))
       return true;
   }
-  return false;
+  return false;    
 }
 
-
-string&  Relation::getName()
+const string&  Relation::getName()
 {
-    return d_name;
+    return _name;
 }
-
-
-
 
 ostream& operator<<(ostream &flux, const Relation &relation)
 {
-  flux << relation.d_name << ":" ;
-  for(unsigned int i=0; i<relation.d_tuplesCollection.size(); i++){
+  flux << relation._name << ":" ;
+  for(unsigned int i=0; i<relation._tuplesCollection.size(); i++){
     flux << "(";
-    for(int j=0; j<relation.d_tupleSize; j++){
-      flux << relation.d_tuplesCollection[i][j] << (j<relation.d_tupleSize-1 ? "," : "");
+    for(int j=0; j<relation._tupleSize; j++){
+      flux << relation._tuplesCollection[i][j] << (j<relation._tupleSize-1 ? "," : "");
     }
-    flux <<")" << (i<relation.d_tuplesCollection.size()-1 ? "," : "") ;
+    flux <<")" << (i<relation._tuplesCollection.size()-1 ? "," : "") ;
   }
   return flux;
 }

@@ -3,34 +3,32 @@
 
 #include "Domain.h"
 
-class Variable
-{
- private :
-  std::string d_name; 
-  int d_variableId;
+class Variable {
+private:
+    static int nbAssigned;
+    
+    std::string _name;
+    int _Id;
+
+    Domain &_domain;
   
-  Domain &d_domain;
+    bool _assigned;
 
-  static int nbAssigned;
+public:
+    Variable(const std::string &name, Domain &domain, int variableId = -1); // The associated domain must be previously created
 
-  bool assigned;
+    static int getNbAssigned();
+    static void setNbAssigned(int nb);
 
- public :
-  Variable(std::string name, Domain &domain, int variableId = -1); // The associated domain must be previously created
-  
-  static int getNbAssigned();
-  static void setNbAssigned(int nb);
-  
-  Domain &getDomain();
-  std::string  &getName() ; 
- 
-  bool isAssigned();
-  void setAssigned(bool a);
+    Domain &getDomain();
+    std::string const &getName() const;
 
-  bool hasEmptyDomain();
+    bool isAssigned() const;
+    void setAssigned(bool a);
 
-  friend std::ostream& operator<<(std::ostream &flux, const Variable &variable);
+    bool hasEmptyDomain() const;
+
+    friend std::ostream& operator<<(std::ostream &flux, const Variable &variable);
 };
-
 
 #endif

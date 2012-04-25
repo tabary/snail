@@ -2,65 +2,56 @@
 
 using namespace std;
 
-
-
-
-Problem::Problem()
-{
-}
- 
-void Problem::setName(string name)
-{
-    d_name = name;
+Problem::Problem() {
 }
 
-
-void Problem::addVariable(Variable *variable)
-{
-  d_variablesCollection.push_back(variable);
+void Problem::setName(const string &name) {
+    _name = name;
 }
 
-void Problem::addConstraint(Constraint *constraint)
-{
-  d_constraintsCollection.push_back(constraint);
+void Problem::addVariable(Variable *variable) {
+    _variablesCollection.push_back(variable);
 }
 
-vector <Constraint *> const &Problem::getConstraintsCollection() const
-{
-  return d_constraintsCollection;
+void Problem::addConstraint(Constraint *constraint) {
+    _constraintsCollection.push_back(constraint);
 }
 
-
-
-Variable &Problem::getVariable(int variableIndex)
-{
-  return *(d_variablesCollection[variableIndex]);
+vector <Constraint *> const &Problem::getConstraintsCollection() const {
+    return _constraintsCollection;
 }
 
-int Problem::getNbVariables()
-{
-  return d_variablesCollection.size();
+vector <Variable *> const &Problem::getVariablesCollection() const {
+    return _variablesCollection;
 }
 
-
-int Problem::getFirstUnassignedVariable()
-{
- for(unsigned int i=0; i < d_variablesCollection.size(); i++)
-   if (!d_variablesCollection[i]->isAssigned())
-     return i;
-   assert(false);
-   return -1;
+Variable &Problem::getVariable(int variableIndex) const {
+    return *(_variablesCollection[variableIndex]);
 }
 
-void Problem::display()
-{
-  cout << "************** DISPLAY PROBLEM " << d_name << " ************" << endl;
-  for(unsigned int i=0; i < d_variablesCollection.size(); i++){
-    cout << *(d_variablesCollection[i]) << endl;
-  }
-  for(unsigned int i=0; i < d_constraintsCollection.size(); i++){
-    cout << *(d_constraintsCollection[i]) << endl;
-  }
+int Problem::getNbVariables() const {
+    return _variablesCollection.size();
+}
+
+int Problem::getNbConstraints() const {
+    return _constraintsCollection.size();
+}
+
+int Problem::getFirstUnassignedVariable() const {
+    for (unsigned int i = 0; i < _variablesCollection.size(); ++i)
+        if (!_variablesCollection[i]->isAssigned())
+            return i;
+    throw("Unreachable Code");
+}
+
+void Problem::display() const {
+    cout << "************** DISPLAY PROBLEM " << _name << " ************" << endl;
+    for (unsigned int i = 0; i < _variablesCollection.size(); ++i) {
+        cout << *(_variablesCollection[i]) << endl;
+    }
+    for (unsigned int i = 0; i < _constraintsCollection.size(); ++i) {
+        cout << *(_constraintsCollection[i]) << endl;
+    }
 }
 
 

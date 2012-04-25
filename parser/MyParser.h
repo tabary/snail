@@ -1,4 +1,3 @@
-
 #include "include/XMLParser_libxml2.hh"
 #include "../Problem.h"
 using namespace CSPXMLParser;
@@ -94,17 +93,16 @@ public:
   {
        
         Relation * myRelation;
-        myRelation = new Relation(name, arity);
+       //myRelation = new Relation(name, arity,relType);
             
     switch(relType)
     {
     case REL_SUPPORT:
-      cout << "supports";
-      break;
+        myRelation = new Relation(name, arity,0);
+        break;
     case REL_CONFLICT:
-    throw runtime_error("Not Implemented");
-        // TODO
-      break;
+        myRelation = new Relation(name, arity,1);
+        break;
     case REL_SOFT:
            throw runtime_error("Not Supported");
       break;
@@ -364,21 +362,21 @@ public:
     else 
     {
       // default
-      cout << "constraint parameters=";
-      args.postfixExpression(cout);
-      cout << endl;
+      //cout << "constraint parameters=";
+      //args.postfixExpression(cout);
+      //cout << endl;
     }
   } 
 
 
   virtual void endConstraint() 
   {
-    cout << "  </constraint>" << endl;
+  //  cout << "  </constraint>" << endl;
   }
 
   virtual void endConstraintsSection() 
   {
-    cout << "</constraints>" <<endl;
+   // cout << "</constraints>" <<endl;
   }
 
   virtual void endInstance() 

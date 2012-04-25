@@ -5,41 +5,37 @@
 #include <vector>
 #include <assert.h>
 
-class Domain
-{
- private :
-  std::string d_name; 
-  std::vector<int> d_initialDomain;
-  std::vector<int> d_currentDomain;
-  int nbRemovals;
+class Domain {
+private:
+    std::string _name;
+    std::vector<int> _initialDomain;
+    std::vector<int> _currentDomain;
+    int _nbRemovals;
 
- public :
-  Domain(std::string name, int min, int max); // Limits are included
-  Domain(std::string);
-  
-  void addValue(int v);
-  void addIntervalValue(int min, int max); // Limits are included
-  
-  
-  
-  
-  std::vector<int> const &getInitialDomain() const;
-  std::vector<int> const &getCurrentDomain() const;
+public:
+    Domain(const std::string &name, int min, int max); // Limits are included
+    Domain(const std::string & name);
 
-  int const getNbRemovals();
-  int const getNbInitialValues();
+    void addValue(int v);
+    void addIntervalValue(int min, int max); // Limits are included
 
-  int getValueOfIndex(int index);
-  int getFirstPresentIndex() const;
-  int getUniqueValue() const;
+    std::vector<int> const &getInitialDomain() const;
+    std::vector<int> const &getCurrentDomain() const;
 
-  void reduceToIndexAtDepth(int valueIndex, int depth);
-  void removeIndex(int valueIndex, int depth);
+    int getNbRemovals() const;
+    int getNbInitialValues() const;
 
-  void restoreAllIndexAtDepth(int depth);
-  void restoreUniqueIndexAtDepth(int index, int depth);
+    int getValueOfIndex(int index) const;
+    int getFirstPresent() const;
+    int getUniquePresent() const;
 
-  friend std::ostream& operator<<(std::ostream &flux, const Domain &domain);
+    void reduceToIndexAtDepth(int valueIndex, int depth);
+    void removeIndexAtDepth(int valueIndex, int depth);
+
+    void restoreAllIndexAtDepth(int depth);
+    void restoreUniqueIndexAtDepth(int index, int depth);
+
+    friend std::ostream& operator<<(std::ostream &flux, const Domain &domain);
 };
 
 

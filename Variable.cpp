@@ -5,11 +5,11 @@ using namespace std;
 int Variable::nbAssigned = 0;
 
 
-Variable::Variable(string name, Domain &domain, int variableId ) : d_name(name), d_variableId(variableId), d_domain(domain), assigned(false)
+Variable::Variable(const string &name, Domain &domain, int variableId ) : _name(name), _Id(variableId), _domain(domain), _assigned(false)
 {
 } 
 
-int Variable::getNbAssigned()
+int Variable::getNbAssigned() 
 {
   return nbAssigned;
 }
@@ -18,39 +18,39 @@ void Variable::setNbAssigned(int nb)
 {
     nbAssigned = nb;
 }
-
  
 Domain &Variable::getDomain()
 {
-  return d_domain;
+  return _domain;
 }
 
-string &Variable::getName() 
+string const &Variable::getName() const
 {
-  return d_name;
+  return _name;
 }
 
-bool Variable::isAssigned()
+bool Variable::isAssigned() const
 {
-  return assigned;
+  return _assigned;
 }
 
 void Variable::setAssigned(bool a)
 {
-  assigned = a;
+    assert(_assigned != a);
+  _assigned = a;
   if (a==true)
     nbAssigned++;
   else 
     nbAssigned--;
 }
 
-bool Variable::hasEmptyDomain()
+bool Variable::hasEmptyDomain() const
 {
-  return (d_domain.getNbRemovals() == d_domain.getNbInitialValues());
+  return (_domain.getNbRemovals() == _domain.getNbInitialValues());
 }
 
 ostream& operator<<(ostream &flux, const Variable &variable)
 {
-  flux << variable.d_name << " with associated domain " << variable.d_domain ;
+  flux << variable._name << " with associated domain " << variable._domain ;
   return flux;
 }
