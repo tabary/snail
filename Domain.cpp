@@ -3,16 +3,29 @@
 using namespace std;
 
 
-Domain::Domain(const string &name, int min, int max) : _name(name), _nbRemovals(0)
+Domain::Domain(const string &name, int min, int max, int nbValues) : _name(name),  _nbRemovals(0)
 {
   assert(max >= min);
   for(int i=min; i<= max; ++i)
     _initialDomain.push_back(i);
   _currentDomain.insert(_currentDomain.begin(),_initialDomain.size(),-1);
+  _removalsStack[0] = new int [nbValues];
+  _removalsStack[1] = new int [nbValues];
 } 
 
-Domain::Domain(const string &name) : _name(name), _nbRemovals(0)
+Domain::Domain(const string &name, int nbValues) : _name(name),  _nbRemovals(0)
 {
+ _removalsStack[0] = new int [nbValues];
+ _removalsStack[1] = new int [nbValues];
+}
+
+Domain::Domain(const Domain& d): _name(d._name) , _initialDomain(d._initialDomain),  _currentDomain(d._currentDomain) , _nbRemovals(d._nbRemovals)
+{      
+    _removalsStack[0] = new int [_initialDomain.size()];
+    _removalsStack[1] = new int [_initialDomain.size()];
+      
+    memcpy(_removalsStack[0],d._removalsStack[0], _initialDomain.size()*sizeof(int));
+    memcpy(_removalsStack[1],d._removalsStack[1], _initialDomain.size()*sizeof(int));
 }
 
 void Domain::addValue(int v)
@@ -39,6 +52,12 @@ vector<int> const &Domain::getCurrentDomain() const
 {
   return _currentDomain;
 }
+
+bool Domain::isPresent(int i) const
+{
+    return (_currentDomain[i] == -1 ? true : false);
+}
+
 
 int Domain::getNbRemovals() const
 {
@@ -78,32 +97,35 @@ void Domain::reduceToIndexAtDepth(int indexValue, int depth)
   for(int i=0; i<(int)_currentDomain.size(); ++i)
     if (_currentDomain[i] == -1 && i != indexValue){
       _currentDomain[i] = depth;
+     _removalsStack[0][_nbRemovals] = i;
+     _removalsStack[1][_nbRemovals] = depth;
       _nbRemovals++;
-    }
+    } 
 }
 
 void Domain::removeIndexAtDepth(int indexValue, int depth)
 {
   assert(_currentDomain[indexValue] == -1);
-  _currentDomain[indexValue] = depth;
+  _currentDomain[indexValue] = depth; 
+  _removalsStack[0][_nbRemovals] = indexValue;
+  _removalsStack[1][_nbRemovals] = depth;
   _nbRemovals++;
-} 
-
+ } 
 
 void Domain::restoreAllIndexAtDepth(int depth)
 {
-  for(int i=0; i<(int)_currentDomain.size(); ++i)
-    if (_currentDomain[i] == depth){
-      _currentDomain[i] = -1;
-      _nbRemovals--;
-    }
+    int index;
+    while (_nbRemovals != 0 && _removalsStack[1][_nbRemovals-1] == depth){     
+        index = _removalsStack[0][_nbRemovals-1];
+        _currentDomain[index] = -1;
+        _nbRemovals--;           
+    }   
 }
 
 void Domain::restoreUniqueIndexAtDepth(int index, int depth)
 {
   assert (_currentDomain[index] == depth);
-  _currentDomain[index] = -1;
-  _nbRemovals--;
+  restoreAllIndexAtDepth(depth);
 }
 
 

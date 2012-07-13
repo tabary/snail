@@ -40,7 +40,7 @@ public:
   virtual void beginDomain(const string & name, int idDomain, int nbValue) 
   {
     Domain * myDomain;
-    myDomain = new Domain(name);
+    myDomain = new Domain(name, nbValue);
     d_domainsCollection[idDomain] = myDomain;
     d_currentDomain = idDomain;
   }
@@ -71,8 +71,9 @@ public:
   {
    Domain  &d0 = *(d_domainsCollection[idDomain]);
    Variable* v;
-   v = new Variable(name, *(new Domain(d0)), idVar);
+   v = new Variable(name, *(new Domain(d0)));
    d_problem.addVariable(v);
+   v->setId(d_problem.getVariablesCollection().size()-1);
   }
 
   virtual void endVariablesSection() 
@@ -199,19 +200,24 @@ public:
 			       const string & reference, 
 			       CSPDefinitionType type, int id,
 			       const ASTList &scope)
-  {
-   
-       Variable** scp= new Variable*[arity];
-//  scp[0]=&v0; scp[1]=&v1; Constraint c0("C0", 2, scp, r0);
+  {   
       
-          for(int i=0;i<scope.size();++i)
-              scp[i] =  &(d_problem.getVariable(scope[i].getVarId()));
       
-    Constraint* c;
-         c = new Constraint(name, arity, scp, getRelation(reference));
-         d_problem.addConstraint(c);
-     
-    constraintReference=reference;
+      
+      Constraint* c;
+      c = new Constraint(name, arity, getRelation(reference));
+      
+      for(int i=0;i<scope.size();++i)
+          c->addVariableToScope(&(d_problem.getVariable(scope[i].getVarId())));
+      
+      
+      d_problem.addConstraint(c);
+      
+      vector<Variable *> &myScope = c->getScope();
+      for(int i=0;i< (int) myScope.size();++i)
+          myScope[i]->addConstraint(c);
+       
+      constraintReference=reference;
   }
 
   virtual void constraintParameters(const ASTList &args)
@@ -381,6 +387,8 @@ public:
 
   virtual void endInstance() 
   {
+      delete d_domainsCollection;
+      delete d_relationsCollection;  
   }
 
 };

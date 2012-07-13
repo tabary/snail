@@ -25,9 +25,10 @@ int main(int argc, char **argv) {
 #ifdef SHOWPROBLEM
         p.display();
 #endif   
+       
         Solver s(p);
-        s.doSearch();
-
+        s.doSearch(); 
+       
         cout << "Total time : " << ((double) (clock()- initialTime))/ CLOCKS_PER_SEC  << endl;
     
     } catch (exception &e) {

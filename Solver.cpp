@@ -5,14 +5,62 @@ using namespace std;
 Solver::Solver(Problem &problem) : _problem(problem), _nbFoundSolutions(0) {
 }
 
-bool Solver::checkConsistency() const {
-    vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
+bool Solver::checkConsistency(int variableIndex, int valueIndex, int depth) const {
+    //    vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
+    vector<Constraint *> const &constraints = _problem.getVariable(variableIndex).getInvolvedConstraints();
+    // Check only the consistency where variableIndex is involved
     for (int i = 0; i < (int) constraints.size(); ++i) {
         if (!constraints[i]->isConsistent())
             return false;
-    }
+    }    
+    // Propagate and then checkConsistency
+//    vector<Constraint *> const &constraints =_problem.getVariable(variableIndex).getInvolvedConstraints();
+//    int myArity;
+//    Variable ** myScope;
+//    for (int i = 0; i < constraints.size(); ++i)
+//    {
+//        myArity = constraints[i].getArity();
+//        myScope = constraints[i].getScope();
+//        for (int j=0; j< myArity ; ++j)
+//        {
+//          if (myScope[j].getIndex == variableIndex) 
+//              continue;
+//          
+//        }      
+//    }
+    
+    
+  
+    
     return true;
 }
+
+ // TODO
+bool Solver::checkForward(int variableIndex, int valueIndex) {
+//   
+//vector<Constraint *> const &constraints = _problem.getVariable(variableIndex).getInvolvedConstraints();
+//
+//for (int i = 0 ; i < (int) constraints.size() ; ++i ) {
+//    vector<Variable *>  &variables = constraints[i]->getScope();
+//    int * t = new int[constraints[i]->getArity()];
+//    for (int j = 0 ; j < (int) variables.size() ; ++j) {
+//        int index = variables[i]->getId();
+//        if (index == variableIndex)  
+//            continue;
+//          std::vector<int> const &currentDomain = variables[i]->getDomain().getCurrentDomain() ;
+//          for (int k = 0; k < (int) currentDomain.size(); ++k){
+//              if (currentDomain[k] == -1){
+//              
+//          
+//              }
+//          }
+//    }
+//}
+}
+
+    
+
+
 
 void Solver::doAssignmentAtCurrentDepth(int variableIndex, int valueIndex, int depth) {
     Variable &v = _problem.getVariable(variableIndex);
@@ -92,7 +140,7 @@ void Solver::doSearch() {
         d.valueIndex = valueIndex;
         decisionStack.push(d);
         
-        if (checkConsistency()) {
+        if (checkConsistency(variableIndex,valueIndex,depth)) {
             if (Variable::getNbAssigned() < _problem.getNbVariables())
                 continue;
             assert(Variable::getNbAssigned() == _problem.getNbVariables());
@@ -114,7 +162,7 @@ void Solver::doSearch() {
                 d.polarity = false;
                 decisionStack.push(d);
                 tryRefutation(d.variableIndex, d.valueIndex, depth++);
-                if (checkConsistency()) stop = true;
+                if (checkConsistency(d.variableIndex,d.valueIndex,depth)) stop = true;
             }
         } while (!stop && !decisionStack.empty());
         if (decisionStack.empty()) fullExploration = true;

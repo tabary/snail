@@ -10,11 +10,16 @@ private:
     std::string _name;
     std::vector<int> _initialDomain;
     std::vector<int> _currentDomain;
+    
+    int* _removalsStack[2]; 
+     
     int _nbRemovals;
 
 public:
-    Domain(const std::string &name, int min, int max); // Limits are included
-    Domain(const std::string & name);
+    Domain(const std::string &name, int min, int max, int nbValues); // Limits are included
+    Domain(const std::string & name, int nbValues);
+    
+    Domain(const Domain &d);
 
     void addValue(int v);
     void addIntervalValue(int min, int max); // Limits are included
@@ -22,6 +27,8 @@ public:
     std::vector<int> const &getInitialDomain() const;
     std::vector<int> const &getCurrentDomain() const;
 
+    bool isPresent(int i) const;
+    
     int getNbRemovals() const;
     int getNbInitialValues() const;
 

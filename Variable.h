@@ -2,6 +2,9 @@
 #define DEF_VARIABLE
 
 #include "Domain.h"
+#include "Constraint.h"
+
+class Constraint;
 
 class Variable {
 private:
@@ -11,6 +14,8 @@ private:
     int _Id;
 
     Domain &_domain;
+    
+     std::vector <Constraint *> _involvedConstraints;
   
     bool _assigned;
 
@@ -20,9 +25,14 @@ public:
     static int getNbAssigned();
     static void setNbAssigned(int nb);
 
+    void addConstraint(Constraint *constraint);
+    
     Domain &getDomain();
     std::string const &getName() const;
-
+    std::vector <Constraint *> const &getInvolvedConstraints() const;
+    
+    int getId();
+    void setId(int id);
     bool isAssigned() const;
     void setAssigned(bool a);
 

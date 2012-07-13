@@ -6,7 +6,7 @@
 
 
 
-#define NB_MAX_SOLUTIONS 1
+#define NB_MAX_SOLUTIONS 50000
 
 
 class Solver
@@ -33,7 +33,10 @@ class Solver
  public :
   Solver(Problem &problem);
 
-  bool checkConsistency() const;
+  bool checkConsistency(int variableIndex, int valueIndex, int depth) const;
+  bool checkForward(int variableIndex, int valueIndex) ;
+  
+  
   void doSearch();
 
 };

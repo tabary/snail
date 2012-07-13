@@ -19,6 +19,12 @@ void Variable::setNbAssigned(int nb)
     nbAssigned = nb;
 }
  
+ void Variable::addConstraint(Constraint *constraint)
+ {
+     _involvedConstraints.push_back(constraint);     
+ }
+
+ 
 Domain &Variable::getDomain()
 {
   return _domain;
@@ -29,6 +35,27 @@ string const &Variable::getName() const
   return _name;
 }
 
+ std::vector <Constraint *> const &Variable::getInvolvedConstraints() const
+ {
+     return _involvedConstraints;
+ }
+
+ 
+ 
+ 
+ 
+ int Variable::getId()
+ {
+     return _Id;
+ }
+  
+ 
+ void Variable::setId(int id){
+     _Id = id;     
+ }
+ 
+ 
+ 
 bool Variable::isAssigned() const
 {
   return _assigned;

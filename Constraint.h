@@ -4,17 +4,31 @@
 #include "Relation.h"
 #include "Variable.h"
 
+class Variable;
+
+
 class Constraint {
 private:
     std::string _name;
     int _arity;
-    Variable **_scope;
+
+    std::vector <Variable *> _scope;    
     Relation const &_relation;
+    
+    tuple myTuple; // temporary tuple
 
 public:
-    Constraint(const std::string &name, int arity, Variable **scope, Relation const &relation); // The associated domain must be previously created
+    Constraint(const std::string &name, int arity, Relation const &relation); // The associated domain must be previously created
 
     bool isConsistent() const;
+    bool isConsistent(tuple t);
+
+    std::vector <Variable *>  &getScope()  ;
+    int getArity();
+    
+    void addVariableToScope(Variable *variable);
+    
+    
 
     friend std::ostream& operator<<(std::ostream &flux, const Constraint &constraint);
 };
