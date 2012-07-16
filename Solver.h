@@ -19,8 +19,15 @@ class Solver
     int valueIndex; // index of the value in the domain 
     bool polarity; // true = assignement and false = refutation
   } decision;
-
   std::stack<decision> decisionStack;
+  
+  typedef struct {
+      int variableIndex;
+      int valueIndex;
+      int depth;
+  }variableValue;
+  std::stack<variableValue> propagationStack;
+  
   int _nbFoundSolutions;
   
   bool DealWithNewSolution( std::stack<decision> solutionStack); // true : NB_MAX_SOLUTIONS is reached
@@ -30,11 +37,25 @@ class Solver
   void undoRefutation(int variableIndex, int valueIndex, int depth);
   void tryRefutation(int variableIndex, int valueIndex, int depth);
 
+  
+  void undoPropagation(int depth) ;
+  
+  
+
+
+bool checkConsistencyAfterAssignement(int variableIndex, int valueIndex, int depth) ;
+bool checkConsistencyAfterRefutation(int variableIndex, int valueIndex, int depth) ;
+
+
+
+  
+  
+  
  public :
   Solver(Problem &problem);
 
-  bool checkConsistency(int variableIndex, int valueIndex, int depth) const;
-  bool checkForward(int variableIndex, int valueIndex) ;
+  bool checkConsistency(int variableIndex, int valueIndex, int depth) ;
+  bool checkForward(int variableIndex, int valueIndex, int depth)  ;
   
   
   void doSearch();

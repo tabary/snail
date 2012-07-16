@@ -44,6 +44,10 @@ void Constraint::addVariableToScope(Variable *variable)
     _scope.push_back(variable);
 }
 
+tuple &Constraint::getMyTuple()
+{
+    return myTuple;
+}
 
 
 

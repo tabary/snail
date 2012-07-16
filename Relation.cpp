@@ -30,8 +30,10 @@ void Relation::addTuple(tuple const t)
 bool Relation::isEqual(tuple const t1, tuple const t2) const
 {
   for(int j=0; j<_tupleSize; ++j){
-    if (t1[j] != t2[j])
-      return false;
+      if (t1[j] == -1 || t2[j] == -1)
+          continue;
+      if (t1[j] != t2[j])
+          return false;
   }
   return true;
 }

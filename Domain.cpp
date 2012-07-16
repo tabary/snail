@@ -124,8 +124,12 @@ void Domain::restoreAllIndexAtDepth(int depth)
 
 void Domain::restoreUniqueIndexAtDepth(int index, int depth)
 {
-  assert (_currentDomain[index] == depth);
-  restoreAllIndexAtDepth(depth);
+   assert (_currentDomain[index] == depth);
+   int i = _removalsStack[0][_nbRemovals-1];
+   assert (i == index);
+   _currentDomain[index] = -1;
+   _nbRemovals--;  
+   // restoreAllIndexAtDepth(depth);
 }
 
 

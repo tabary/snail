@@ -28,6 +28,7 @@ public:
     
     void addVariableToScope(Variable *variable);
     
+    tuple &getMyTuple();
     
 
     friend std::ostream& operator<<(std::ostream &flux, const Constraint &constraint);
