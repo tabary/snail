@@ -19,7 +19,7 @@ public:
     void addConstraint(Constraint *constraint);
 
     std::vector <Constraint *> const &getConstraintsCollection() const;
-    std::vector <Variable *> const &getVariablesCollection() const;
+    std::vector <Variable *>  &getVariablesCollection() ;
     
     Variable &getVariable(int variableIndex) const;
     

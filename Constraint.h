@@ -23,13 +23,13 @@ public:
     bool isConsistent() const;
     bool isConsistent(tuple t);
 
-    std::vector <Variable *>  &getScope()  ;
+    std::vector <Variable *>  const &getScope() const;
+    
     int getArity();
     
     void addVariableToScope(Variable *variable);
     
     tuple &getMyTuple();
-    
 
     friend std::ostream& operator<<(std::ostream &flux, const Constraint &constraint);
 };

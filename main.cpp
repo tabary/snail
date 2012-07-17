@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
         p.display();
 #endif   
        
+                  
         Solver s(p);
         s.doSearch(); 
        

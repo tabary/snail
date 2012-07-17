@@ -21,7 +21,7 @@ vector <Constraint *> const &Problem::getConstraintsCollection() const {
     return _constraintsCollection;
 }
 
-vector <Variable *> const &Problem::getVariablesCollection() const {
+vector <Variable *>  &Problem::getVariablesCollection()  {
     return _variablesCollection;
 }
 

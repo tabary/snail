@@ -213,7 +213,7 @@ public:
       
       d_problem.addConstraint(c);
       
-      vector<Variable *> &myScope = c->getScope();
+      vector<Variable *> const &myScope = c->getScope();
       for(int i=0;i< (int) myScope.size();++i)
           myScope[i]->addConstraint(c);
        

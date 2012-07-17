@@ -16,10 +16,10 @@ private:
     int _nbRemovals;
 
 public:
-    Domain(const std::string &name, int min, int max, int nbValues); // Limits are included
-    Domain(const std::string & name, int nbValues);
+    Domain(std::string const &name, int min, int max, int nbValues); // Limits are included
+    Domain(std::string const &name, int nbValues);
     
-    Domain(const Domain &d);
+    Domain(Domain const &d);
 
     void addValue(int v);
     void addIntervalValue(int min, int max); // Limits are included
@@ -31,8 +31,9 @@ public:
     
     int getNbRemovals() const;
     int getNbInitialValues() const;
+    int getNbCurrentValues() const;
 
-    int getValueOfIndex(int index) const;
+    int getValueOfIndex(int  index) const;
     int getFirstPresent() const;
     int getUniquePresent() const;
 

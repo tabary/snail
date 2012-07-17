@@ -27,12 +27,13 @@ public:
 
     void addConstraint(Constraint *constraint);
     
-    Domain &getDomain();
+    Domain &getDomain() const;
     std::string const &getName() const;
     std::vector <Constraint *> const &getInvolvedConstraints() const;
     
-    int getId();
+    int getId() const;
     void setId(int id);
+    
     bool isAssigned() const;
     void setAssigned(bool a);
 
