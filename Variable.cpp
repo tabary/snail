@@ -39,6 +39,21 @@ void Variable::setId(int id) {
     _Id = id;
 }
 
+
+int Variable::getDegree() const{
+    return _involvedConstraints.size();
+}
+
+
+int Variable::getDDegree() const{
+    int cpt=0;
+    for (unsigned int i=0; i< _involvedConstraints.size(); ++i) {
+        if (!_involvedConstraints[i]->isCovered())
+            cpt++;
+    }
+    return cpt;
+}
+    
 bool Variable::isAssigned() const {
     return _assigned;
 }
@@ -46,10 +61,16 @@ bool Variable::isAssigned() const {
 void Variable::setAssigned(bool a) {
     assert(_assigned != a);
     _assigned = a;
-    if (a == true)
+    if (a == true){
+        for (unsigned int i=0; i< _involvedConstraints.size(); ++i)
+            _involvedConstraints[i]->decNbUnassignedVariable();
         nbAssigned++;
-    else
+    }
+    else{
+        for (unsigned int i=0; i< _involvedConstraints.size(); ++i)
+            _involvedConstraints[i]->incNbUnassignedVariable();
         nbAssigned--;
+    }
 }
 
 bool Variable::hasEmptyDomain() const {

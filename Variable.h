@@ -34,6 +34,9 @@ public:
     int getId() const;
     void setId(int id);
     
+    int getDegree() const;
+    int getDDegree() const;
+    
     bool isAssigned() const;
     void setAssigned(bool a);
 

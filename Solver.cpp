@@ -1,11 +1,13 @@
 #include "Solver.h"
 #include "Dom.h"
+#include "DomOnDDeg.h"
 #include "Lexico.h"
 using namespace std;
 
 Solver::Solver(Problem &problem) : _problem(problem),   _nbFoundSolutions(0) {
-    _variableHeuristic = new Dom(problem.getVariablesCollection());
-   //_variableHeuristic = new Lexico(problem.getVariablesCollection());
+    _variableHeuristic = new DomOnDDeg(problem.getVariablesCollection());
+    //_variableHeuristic = new Dom(problem.getVariablesCollection());
+    //_variableHeuristic = new Lexico(problem.getVariablesCollection());
 }
 
 void Solver::doAssignmentAtCurrentDepth(int variableIndex, int valueIndex, int depth) {

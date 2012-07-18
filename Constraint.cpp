@@ -3,7 +3,7 @@
 using namespace std;
 
 
-Constraint::Constraint(const string &name, int arity, Relation const &relation) : _name(name), _arity(arity), _relation(relation)
+Constraint::Constraint(const string &name, int arity, Relation const &relation) : _name(name), _arity(arity), _nbUnassignedVariable(arity),  _relation(relation)
 {
     assert(_arity >= 1);
     myTuple = new int[_arity];
@@ -26,6 +26,18 @@ bool Constraint::isConsistent() const
 bool Constraint::isConsistent(tuple t)
 {
     return _relation.isValid(t);
+}
+
+bool Constraint::isCovered() const {
+       return (_nbUnassignedVariable == 0 ? true : false);
+}
+
+void Constraint::incNbUnassignedVariable(){
+    _nbUnassignedVariable++;
+}
+
+void Constraint::decNbUnassignedVariable(){
+    _nbUnassignedVariable--;        
 }
 
 std::vector <Variable *> const &Constraint::getScope() const

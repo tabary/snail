@@ -11,6 +11,8 @@ class Constraint {
 private:
     std::string _name;
     int _arity;
+    
+    int _nbUnassignedVariable;
 
     std::vector <Variable *> _scope;    
     Relation const &_relation;
@@ -23,6 +25,11 @@ public:
     bool isConsistent() const;
     bool isConsistent(tuple t);
 
+    bool isCovered() const;
+    
+    void incNbUnassignedVariable();
+    void decNbUnassignedVariable();
+    
     std::vector <Variable *>  const &getScope() const;
     
     int getArity();

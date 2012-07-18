@@ -37,13 +37,6 @@ int Problem::getNbConstraints() const {
     return _constraintsCollection.size();
 }
 
-int Problem::getFirstUnassignedVariable() const {
-    for (unsigned int i = 0; i < _variablesCollection.size(); ++i)
-        if (!_variablesCollection[i]->isAssigned())
-            return i;
-    throw("Unreachable Code");
-}
-
 void Problem::display() const {
     cout << "************** DISPLAY PROBLEM " << _name << " ************" << endl;
     for (unsigned int i = 0; i < _variablesCollection.size(); ++i) {

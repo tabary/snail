@@ -26,8 +26,6 @@ public:
     int getNbVariables() const;
     int getNbConstraints() const;
     
-    int getFirstUnassignedVariable() const;
-
     void display() const;
 };
 
