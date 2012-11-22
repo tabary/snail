@@ -6,10 +6,10 @@ DomOnDDeg::DomOnDDeg(vector <Variable*> &variables) : VariableOrderingHeuristic(
 {  
 }
 
-int DomOnDDeg::selectVariable()
+int DomOnDDeg::chooseVariable()
 {
     int variableIndex = -1;
-    double cost = 0;
+    float cost = 0;
     for (unsigned int i = 0; i < _variablesCollection.size(); ++i){
         if (_variablesCollection[i]->isAssigned())
             continue;

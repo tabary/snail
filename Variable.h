@@ -31,8 +31,8 @@ public:
     std::string const &getName() const;
     std::vector <Constraint *> const &getInvolvedConstraints() const;
     
-    int getId() const;
-    void setId(int id);
+    int getIndex() const;
+    void setIndex(int id);
     
     int getDegree() const;
     int getDDegree() const;

@@ -1,11 +1,15 @@
 #include "Solver.h"
 #include "Dom.h"
 #include "DomOnDDeg.h"
+#include "DomOnDeg.h"
+#include "BinaryForwardChecking.h"
 #include "Lexico.h"
 using namespace std;
 
 Solver::Solver(Problem &problem) : _problem(problem),   _nbFoundSolutions(0) {
     _variableHeuristic = new DomOnDDeg(problem.getVariablesCollection());
+    _propagator = new BinaryForwardChecking(_problem);
+    
     //_variableHeuristic = new Dom(problem.getVariablesCollection());
     //_variableHeuristic = new Lexico(problem.getVariablesCollection());
 }
@@ -24,7 +28,7 @@ void Solver::undoAssignment(int variableIndex, int valueIndex, int depth) {
 #ifdef TRACE
     cout << "undo assignement of " << v.getName() << " = " << v.getDomain().getValueOfIndex(valueIndex) << endl;
 #endif
-      undoPropagation(depth);
+      _propagator->undoPropagation(depth);
     v.getDomain().restoreAllIndexAtDepth(depth);
     v.setAssigned(false);
 }
@@ -46,20 +50,6 @@ void Solver::undoRefutation(int variableIndex, int valueIndex, int depth) {
     v.getDomain().restoreUniqueIndexAtDepth(valueIndex, depth);
 }
 
-void Solver::undoPropagation(int depth) {
-    variableValue v;
-    while (!propagationStack.empty()) {
-        v = propagationStack.top();
-        if (v.depth < depth)
-            break;
-        propagationStack.pop();
-        
-#ifdef TRACE  
-           cout << "Undo Propagation at depth " << depth  << " of variableIndex :" << v.variableIndex << " with value " << v.valueIndex <<  endl;
-#endif
-        _problem.getVariable(v.variableIndex).getDomain().restoreUniqueIndexAtDepth(v.valueIndex,v.depth);
-    } 
-}
 
 bool Solver::checkConsistency(int variableIndex, int valueIndex, int depth)  {
     //    vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
@@ -72,64 +62,13 @@ bool Solver::checkConsistency(int variableIndex, int valueIndex, int depth)  {
     return true;
 }
  
-bool Solver::checkForward(int variableIndex, int valueIndex, int depth)  {
-    variableValue v;
-    vector<Constraint *> const &constraints = _problem.getVariable(variableIndex).getInvolvedConstraints();
-    
-    for (int i = 0 ; i < (int) constraints.size() ; ++i ) {     
-        vector<Variable *>  const &scope = constraints[i]->getScope();
-        tuple &t = constraints[i]->getMyTuple();
-        
-        // Init of the tuple
-        for (int l=0; l < (int) scope.size(); ++l) {
-            if (scope[l]->getId() == variableIndex)
-                t[l] = scope[l]->getDomain().getValueOfIndex(valueIndex);
-            else
-                t[l] = -1;    
-        }
-        
-        for (int j = 0 ; j < (int) scope.size() ; ++j) {            
-            int index = scope[j]->getId();
-            if (index == variableIndex || scope[j]->isAssigned())  
-                continue;
-            std::vector<int> const &currentDomain = scope[j]->getDomain().getCurrentDomain() ;
-            for (int k = 0; k < (int) currentDomain.size(); ++k){
-                if (currentDomain[k] == -1){
-                    t[j] = scope[j]->getDomain().getValueOfIndex(k);  
-                    if (!constraints[i]->isConsistent(t)){
-                        v.variableIndex = index ;
-                        v.valueIndex = k;
-                        v.depth = depth ;
-                        propagationStack.push(v);
-                        scope[j]->getDomain().removeIndexAtDepth(k,depth);
-                       
-#ifdef TRACE  
-                        cout << "Propagation at depth " << depth  << " of variableIndex :" << v.variableIndex << " with valueIndex " << v.valueIndex <<  endl;
-#endif
-                        
-                    }
-                }
-            }
-            t[j]=-1;
-            if (scope[j]->hasEmptyDomain())
-                return false;
-        }
-    }
-    return true;
-}
   
-bool Solver::checkConsistencyAfterAssignement(int variableIndex, int valueIndex, int depth) {
-    
-    if (!checkConsistency(variableIndex,valueIndex,depth))
-        return false;
-    return checkForward(variableIndex,valueIndex,depth);
-   
+bool Solver::checkConsistencyAfterAssignement(int variableIndex, int valueIndex, int depth) {    
+    return _propagator->propagate(variableIndex,valueIndex,depth);
 }
 
 bool Solver::checkConsistencyAfterRefutation(int variableIndex, int valueIndex, int depth) {
-    
     return checkConsistency(variableIndex,valueIndex,depth);
-    
 }
 
 void Solver::doSearch() {
@@ -137,8 +76,8 @@ void Solver::doSearch() {
 
     int depth(0);
 
-    int variableIndex(0);
-    int valueIndex(0);
+    int variableIndex(-1);
+    int valueIndex(-1);
 
     decision d;
 
@@ -149,11 +88,12 @@ void Solver::doSearch() {
 
     while (!fullExploration) {
         
-        variableIndex = _variableHeuristic->selectVariable();
+        variableIndex = _variableHeuristic->chooseVariable();
         valueIndex = _problem.getVariable(variableIndex).getDomain().getFirstPresent();
+      
         doAssignmentAtCurrentDepth(variableIndex, valueIndex, depth++);
 
-        d.polarity = true;
+        d.polarity = true;  // Should be in the doAssignment procedure ?????
         d.variableIndex = variableIndex;
         d.valueIndex = valueIndex;
         decisionStack.push(d);

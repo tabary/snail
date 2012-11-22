@@ -31,11 +31,11 @@ std::vector <Constraint *> const &Variable::getInvolvedConstraints() const {
     return _involvedConstraints;
 }
 
-int Variable::getId() const {
+int Variable::getIndex() const {
     return _Id;
 }
 
-void Variable::setId(int id) {
+void Variable::setIndex(int id) {
     _Id = id;
 }
 

@@ -6,7 +6,7 @@ Lexico::Lexico(vector <Variable*> &variables) : VariableOrderingHeuristic(variab
 {  
 }
 
-int Lexico::selectVariable()
+int Lexico::chooseVariable()
 {
     for (unsigned int i = 0; i < _variablesCollection.size(); ++i)
         if (!_variablesCollection[i]->isAssigned())

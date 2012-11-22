@@ -9,7 +9,10 @@ private:
     std::string _name;
     std::vector <Variable*> _variablesCollection;
     std::vector <Constraint *> _constraintsCollection;
-
+    
+    int minArity;
+    int maxArity;
+   
 public:
     Problem();
 
@@ -25,6 +28,9 @@ public:
     
     int getNbVariables() const;
     int getNbConstraints() const;
+   
+    int getMinArity();
+    int getMaxArity();
     
     void display() const;
 };

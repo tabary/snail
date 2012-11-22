@@ -10,7 +10,7 @@ class Dom : public VariableOrderingHeuristic {
 public:
     Dom(std::vector <Variable*> &variables);
 
-    virtual int selectVariable();
+    virtual int chooseVariable();
 };
 
 #endif

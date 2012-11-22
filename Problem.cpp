@@ -13,7 +13,11 @@ void Problem::addVariable(Variable *variable) {
     _variablesCollection.push_back(variable);
 }
 
-void Problem::addConstraint(Constraint *constraint) {
+void Problem::addConstraint(Constraint *constraint) {    
+    if (_constraintsCollection.size() == 0 || minArity > constraint->getArity())
+        minArity = constraint->getArity();
+    if (_constraintsCollection.size() == 0 || maxArity < constraint->getArity())
+        maxArity = constraint->getArity();
     _constraintsCollection.push_back(constraint);
 }
 
@@ -36,6 +40,14 @@ int Problem::getNbVariables() const {
 int Problem::getNbConstraints() const {
     return _constraintsCollection.size();
 }
+
+  int Problem::getMinArity() {
+      return minArity;
+  }
+  
+  int Problem::getMaxArity(){
+      return maxArity;
+  }
 
 void Problem::display() const {
     cout << "************** DISPLAY PROBLEM " << _name << " ************" << endl;

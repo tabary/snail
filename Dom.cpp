@@ -6,7 +6,7 @@ Dom::Dom(vector <Variable*> &variables) : VariableOrderingHeuristic(variables)
 {  
 }
 
-int Dom::selectVariable()
+int Dom::chooseVariable()
 {
     int variableIndex = -1;
     for (unsigned int i = 0; i < _variablesCollection.size(); ++i){

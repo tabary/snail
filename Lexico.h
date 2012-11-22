@@ -10,7 +10,7 @@ class Lexico : public VariableOrderingHeuristic {
 public:
     Lexico(std::vector <Variable*> &variables);
 
-    virtual int selectVariable();
+    virtual int chooseVariable();
 };
 
 #endif

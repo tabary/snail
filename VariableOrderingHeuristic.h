@@ -12,7 +12,7 @@ protected:
 public:
     VariableOrderingHeuristic(std::vector <Variable*> &variables); 
     
-    virtual int selectVariable() = 0;
+    virtual int chooseVariable() = 0;
 };
 
 #endif

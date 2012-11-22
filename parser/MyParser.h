@@ -73,7 +73,7 @@ public:
    Variable* v;
    v = new Variable(name, *(new Domain(d0)));
    d_problem.addVariable(v);
-   v->setId(d_problem.getVariablesCollection().size()-1);
+   v->setIndex(d_problem.getVariablesCollection().size()-1);
   }
 
   virtual void endVariablesSection() 
