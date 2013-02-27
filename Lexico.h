@@ -4,13 +4,12 @@
 
 #include "VariableOrderingHeuristic.h"
 
-class Lexico : public VariableOrderingHeuristic {
-
-
+class Lexico : public VariableOrderingHeuristic
+{
 public:
-    Lexico(std::vector <Variable*> &variables);
+  Lexico (std::vector <Variable*> &variables);
 
-    virtual int chooseVariable();
+  virtual int chooseVariable ();
 };
 
 #endif

@@ -4,13 +4,12 @@
 
 #include "VariableOrderingHeuristic.h"
 
-class Dom : public VariableOrderingHeuristic {
-
-
+class Dom : public VariableOrderingHeuristic
+{
 public:
-    Dom(std::vector <Variable*> &variables);
+  Dom (std::vector <Variable*> &variables);
 
-    virtual int chooseVariable();
+  virtual int chooseVariable ();
 };
 
 #endif

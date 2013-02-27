@@ -1,22 +1,29 @@
-#ifndef DEF_FORWARDCHECKING
-#define DEF_FORMARDCHECKING
-
-#include "Propagator.h"
-
-/* For the moment the forwardChecking class deals only with binary constraints  
-    See the definition of Haralick and Elliot HE80 
- 
-    NON BINARY CONSTRAINTS ARE SKIPPED 
-
- */
-
-class BinaryForwardChecking : public Propagator {
-
-public:
-    BinaryForwardChecking(Problem &problem);
-
-    virtual bool propagate(int variableIndex, int valueIndex, int depth);
-    virtual void undoPropagation(int depth);
-};
-
-#endif
+//#ifndef DEF_BINARYAC3
+//#define DEF_BINARYAC3
+//
+//#include "Propagator.h"
+//#include "list"
+//
+///* For the moment the BinaryAC3 class performs arc consisency with no optimizations
+//    See the definition of Mackworth77
+// 
+//    NON BINARY CONSTRAINTS ARE SKIPPED 
+//
+// */
+//
+//class BinaryAC3 : public Propagator
+//{
+//  private:
+//    std::list<Variable*> propagationQueue;
+//    
+//    bool revise(Constraint& c,Variable& x, int depth);
+//    bool seekSupport(Constraint& c,Variable& x, int indexValue);
+//    
+//    public:
+//      BinaryAC3 (Problem &problem);
+//      
+//      virtual bool propagate (int variableIndex, int valueIndex, int depth);
+//      virtual void undoPropagation (int depth);
+//};
+//
+//#endif

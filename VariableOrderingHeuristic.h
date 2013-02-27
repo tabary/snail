@@ -3,16 +3,17 @@
 
 #include "Variable.h"
 
-class VariableOrderingHeuristic {
+class VariableOrderingHeuristic
+{
 private:
 
 protected:
-     std::vector <Variable*> &_variablesCollection;
-     
+  std::vector <Variable*> &_variablesCollection;
+
 public:
-    VariableOrderingHeuristic(std::vector <Variable*> &variables); 
-    
-    virtual int chooseVariable() = 0;
+  VariableOrderingHeuristic (std::vector <Variable*> &variables);
+
+  virtual int chooseVariable () = 0;
 };
 
 #endif

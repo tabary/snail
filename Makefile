@@ -1,6 +1,6 @@
 
 CPP=g++
-OPT=-g -DTMPDEBUG -DSHOWPROBLEM -I/opt/local/include/libxml2 -I./parser/include
+OPT=-g -DTMPDEBUG  -DSHOWPROBLEM -I/opt/local/include/libxml2 -I./parser/include
 #OPT=-g -DTMPDEBUG -DTRACE
 #OPT=-O3 -DNDEBUG
 CXXFLAGS =-Wall $(OPT)

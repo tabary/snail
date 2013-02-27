@@ -2,8 +2,13 @@
 
 using namespace std;
 
-Propagator::Propagator(Problem &problem) : _problem(problem)
+Propagator::Propagator () 
 {
-   
 }
 
+
+void 
+Propagator::dealWith (Constraint *c)
+{
+_constraints.push_back (c)  ;
+}

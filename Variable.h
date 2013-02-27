@@ -6,43 +6,44 @@
 
 class Constraint;
 
-class Variable {
+class Variable
+{
 private:
-    static int nbAssigned;
-    
-    std::string _name;
-    int _Id;
+  static int nbAssigned;
 
-    Domain &_domain;
-    
-     std::vector <Constraint *> _involvedConstraints;
-  
-    bool _assigned;
+  std::string _name;
+  int _Id;
+
+  Domain &_domain;
+
+  std::vector <Constraint *> _involvedConstraints;
+
+  bool _assigned;
 
 public:
-    Variable(const std::string &name, Domain &domain, int variableId = -1); // The associated domain must be previously created
+  Variable (const std::string &name, Domain &domain, int variableId = -1); // The associated domain must be previously created
 
-    static int getNbAssigned();
-    static void setNbAssigned(int nb);
+  static int getNbAssigned ();
+  static void setNbAssigned (int nb);
 
-    void addConstraint(Constraint *constraint);
-    
-    Domain &getDomain() const;
-    std::string const &getName() const;
-    std::vector <Constraint *> const &getInvolvedConstraints() const;
-    
-    int getIndex() const;
-    void setIndex(int id);
-    
-    int getDegree() const;
-    int getDDegree() const;
-    
-    bool isAssigned() const;
-    void setAssigned(bool a);
+  void addConstraint (Constraint *constraint);
 
-    bool hasEmptyDomain() const;
+  Domain &getDomain () const;
+  std::string const &getName () const;
+  std::vector <Constraint *> const &getInvolvedConstraints () const;
 
-    friend std::ostream& operator<<(std::ostream &flux, const Variable &variable);
+  int getIndex () const;
+  void setIndex (int id);
+
+  int getDegree () const;
+  int getDDegree () const;
+
+  bool isAssigned () const;
+  void setAssigned (bool a);
+
+  bool hasEmptyDomain () const;
+
+  friend std::ostream& operator<< (std::ostream &flux, const Variable &variable);
 };
 
 #endif

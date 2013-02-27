@@ -1,72 +1,101 @@
-#include "BinaryForwardChecking.h"
-
-using namespace std;
-
-BinaryForwardChecking::BinaryForwardChecking(Problem &problem) : Propagator(problem)
-{  
-    assert(problem.getMinArity() == 2 && problem.getMaxArity() == 2);
-}
-
-bool BinaryForwardChecking::propagate(int variableIndex, int valueIndex, int depth)
-{
-    variableValue v;
-    vector<Constraint *> const &constraints = _problem.getVariable(variableIndex).getInvolvedConstraints();
-    
-    for (int i = 0 ; i < (int) constraints.size() ; ++i ) {      
-        if (constraints[i]->getArity() != 2)
-            continue;        
-        vector<Variable *>  const &scope = constraints[i]->getScope();
-        tuple &t = constraints[i]->getMyTuple();
-        int positionOfFutureVariableInScope;
-        
-        // Init of the tuple with the assigned variable and determine the index of the second variable (unassigned variable)
-        for (int j=0; j < (int) scope.size(); ++j) {
-            if (scope[j]->getIndex() == variableIndex)
-                t[j] = scope[j]->getDomain().getValueOfIndex(valueIndex);
-            else {
-                t[j] = -1; 
-                positionOfFutureVariableInScope=j;
-            }
-        }
-        
-        std::vector<int> const &currentDomainOfFutureVariable = scope[positionOfFutureVariableInScope]->getDomain().getCurrentDomain() ;
-        Variable* futureVariable = scope[positionOfFutureVariableInScope];
-        
-        for (int j = 0; j < (int) currentDomainOfFutureVariable.size(); ++j){
-                if (currentDomainOfFutureVariable[j] == -1){
-                    t[positionOfFutureVariableInScope] = futureVariable->getDomain().getValueOfIndex(j);  
-                    if (!constraints[i]->isConsistent(t)){
-                        v.variableIndex = futureVariable->getIndex();
-                        v.valueIndex = j;
-                        v.depth = depth ;
-                        propagationStack.push(v);
-                        futureVariable->getDomain().removeIndexAtDepth(j,depth);     
-#ifdef TRACE  
-                        cout << "Propagation at depth " << v.depth  << " of variableIndex :" << v.variableIndex << " with valueIndex " << v.valueIndex <<  endl;
-#endif
-                    }
-                }
-            }
-        
-        if (futureVariable->hasEmptyDomain())
-                return false;  
-    }
-    return true;
-}
-
-
-void BinaryForwardChecking::undoPropagation(int depth)
-{
-    variableValue v;
-    while (!propagationStack.empty()) {
-        v = propagationStack.top();
-        if (v.depth < depth)
-            break;
-        propagationStack.pop();
-#ifdef TRACE  
-           cout << "Undo Propagation at depth " << depth  << " of variableIndex :" << v.variableIndex << " with value " << v.valueIndex <<  endl;
-#endif
-        _problem.getVariable(v.variableIndex).getDomain().restoreUniqueIndexAtDepth(v.valueIndex,v.depth);
-    } 
-    
-}
+//#include "BinaryAC3.h"
+//
+//using namespace std;
+//
+//BinaryAC3::BinaryAC3 (Problem &problem) : Propagator (problem)
+//{
+//  assert (problem.getMinArity () == 2 && problem.getMaxArity () == 2);
+//}
+//
+//bool
+//BinaryAC3::propagate (int variableIndex, int valueIndex, int depth)
+//{
+//  assert (propagationQueue.empty ());
+//
+//
+//  //  cerr << "Begining of propagation" << endl;
+//
+//  propagationQueue.push_front (&(_problem.getVariable (variableIndex)));
+//  Variable* y;
+//
+//  while (!propagationQueue.empty ())
+//    {
+//      Variable& v = *(propagationQueue.front ());
+//      propagationQueue.pop_front ();
+//
+//      //   cerr << "Pick " << v << " in propagation queue" << endl;
+//
+//
+//      vector<Constraint *> const &constraints = v.getInvolvedConstraints ();
+//      for (unsigned int i = 0; i < constraints.size (); ++i)
+//        {
+//
+//          //    cerr << "Check " << *(constraints[i]) << endl;
+//
+//          vector<Variable *> const &scope = constraints[i]->getScope ();
+//          for (int j = 0; j < (int) scope.size (); ++j)
+//            {
+//              if (scope[j]->getIndex () == v.getIndex ())
+//                continue;
+//              y = scope[j];
+//              if (revise (*(constraints[i]), *y, depth))
+//                {
+//                  if (y->hasEmptyDomain ())
+//                    {
+//                      propagationQueue.clear ();
+//                      return false;
+//                    }
+//                  propagationQueue.push_back (y);
+//                }
+//            }
+//        }
+//    }
+//  return true;
+//}
+//
+//bool
+//BinaryAC3::revise (Constraint& c, Variable& x, int depth)
+//{
+//
+//  // cerr << "Revise " << x << endl;
+//
+//
+//  int domainSize = x.getDomain ().getNbCurrentValues ();
+//  const vector<int>& d = x.getDomain ().getCurrentDomain ();
+//  for (unsigned int i = 0; i < d.size (); ++i)
+//    if (d[i] == -1 && !seekSupport (c, x, i))
+//      {
+//        x.getDomain ().removeIndexAtDepth (i, depth);
+//        cout << "Removals of  " << i << " at depth " << depth << "for variable " << x.getName () << endl;
+//      }
+//
+//
+//  return domainSize != x.getDomain ().getNbCurrentValues ();
+//}
+//
+//
+//// TODO
+//bool
+//BinaryAC3::seekSupport (Constraint& c, Variable& x, int indexValue)
+//{
+//  return c.seekSupport (x, indexValue);
+//}
+//
+//void
+//BinaryAC3::undoPropagation (int depth)
+//{
+//
+//  variableValue v;
+//  while (!propagationStack.empty ())
+//    {
+//      v = propagationStack.top ();
+//      if (v.depth < depth)
+//        break;
+//      propagationStack.pop ();
+//#ifdef TRACE  
+//      cout << "Undo Propagation at depth " << depth << " of variableIndex :" << v.variableIndex << " with value " << v.valueIndex << endl;
+//#endif
+//      _problem.getVariable (v.variableIndex).getDomain ().restoreUniqueIndexAtDepth (v.valueIndex, v.depth);
+//    }
+//
+//}

@@ -4,46 +4,60 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
+#include <string.h>
 
-class Domain {
+
+class Domain
+{
 private:
-    std::string _name;
-    std::vector<int> _initialDomain;
-    std::vector<int> _currentDomain;
-    
-    int* _removalsStack[2]; 
-     
-    int _nbRemovals;
+  std::string _name;
+  std::vector<int> _initialDomain;
+  std::vector<int> _currentDomain;
+  
+  int* _removalsStack[2];
+
+  int _nbRemovals;
+  
+  int iterator;
 
 public:
-    Domain(std::string const &name, int min, int max, int nbValues); // Limits are included
-    Domain(std::string const &name, int nbValues);
-    
-    Domain(Domain const &d);
+  Domain (std::string const &name, int min, int max, int nbValues); // Limits are included
+  Domain (std::string const &name, int nbValues);
 
-    void addValue(int v);
-    void addIntervalValue(int min, int max); // Limits are included
+  Domain (Domain const &d);
 
-    std::vector<int> const &getInitialDomain() const;
-    std::vector<int> const &getCurrentDomain() const;
+  void addValue (int v);
+  void addIntervalValue (int min, int max); // Limits are included
 
-    bool isPresent(int i) const;
-    
-    int getNbRemovals() const;
-    int getNbInitialValues() const;
-    int getNbCurrentValues() const;
+  std::vector<int> const &getInitialDomain () const;
+  std::vector<int> const &getCurrentDomain () const;
 
-    int getValueOfIndex(int  index) const;
-    int getFirstPresent() const;
-    int getUniquePresent() const;
+  bool isPresent (int i) const;
 
-    void reduceToIndexAtDepth(int valueIndex, int depth);
-    void removeIndexAtDepth(int valueIndex, int depth);
+  int getNbRemovals () const;
+  int getNbInitialValues () const;
+  int getNbCurrentValues () const;
 
-    void restoreAllIndexAtDepth(int depth);
-    void restoreUniqueIndexAtDepth(int index, int depth);
+  int getValueOfIndex (int index) const;
+  int getFirstPresent () const;
+  int getUniquePresentValue () const;
+  int getUniquePresentIndex () const;
+  
+  
+  int getNextPresentIndexAfter(int index) const;
 
-    friend std::ostream& operator<<(std::ostream &flux, const Domain &domain);
+  void reduceToIndexAtDepth (int valueIndex, int depth);
+  void removeIndexAtDepth (int valueIndex, int depth);
+
+  void restoreAllIndexAtDepth (int depth);
+  void restoreUniqueIndexAtDepth (int index, int depth);
+
+  void initIterator();
+  int nextIterator();
+  
+  
+  
+  friend std::ostream& operator<< (std::ostream &flux, const Domain &domain);
 };
 
 

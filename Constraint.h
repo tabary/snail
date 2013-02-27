@@ -4,41 +4,46 @@
 #include "Relation.h"
 #include "Variable.h"
 
+
 class Variable;
 
 
-class Constraint {
+class Constraint
+{
 private:
-    std::string _name;
-    int _arity;
-    
-    int _nbUnassignedVariable;
+  std::string _name;
+  int _arity;
 
-    std::vector <Variable *> _scope;    
-    Relation const &_relation;
-    
-    tuple myTuple; // temporary tuple
+  int _nbUnassignedVariable;
 
-public:
-    Constraint(const std::string &name, int arity, Relation const &relation); // The associated domain must be previously created
+  std::vector <Variable *> _scope;
+  Relation const &_relation;
 
-    bool isConsistent() const;
-    bool isConsistent(tuple t);
+  tuple myTuple; // temporary tuple
 
-    bool isCovered() const;
-    
-    void incNbUnassignedVariable();
-    void decNbUnassignedVariable();
-    
-    std::vector <Variable *>  const &getScope() const;
-    
-    int getArity();
-    
-    void addVariableToScope(Variable *variable);
-    
-    tuple &getMyTuple();
+  public:
+  Constraint (const std::string &name, int arity, Relation const &relation); // The associated domain must be previously created
+ 
+  
+  bool isConsistent () const;
+  bool isValid (tuple t) const;
+  bool seekSupport(Variable &x, int indexValue);
+  
+ 
+  bool isCovered () const;
 
-    friend std::ostream& operator<<(std::ostream &flux, const Constraint &constraint);
+  void incNbUnassignedVariable ();
+  void decNbUnassignedVariable ();
+
+  std::vector <Variable *> const &getScope () const;
+
+  int getArity ();
+
+  void addVariableToScope (Variable *variable);
+
+  tuple &getMyTuple ();
+
+  friend std::ostream& operator<< (std::ostream &flux, const Constraint &constraint);
 };
 
 #endif
