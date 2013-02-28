@@ -4,7 +4,7 @@ using namespace std;
 
 int Variable::nbAssigned = 0;
 
-Variable::Variable (const string &name, Domain &domain, int variableId) : _name (name), _Id (variableId), _domain (domain), _assigned (false) { }
+Variable::Variable (const string &name, Domain &domain, int variableId) : _name (name), _id (variableId), _domain (domain), _assigned (false) { }
 
 int
 Variable::getNbAssigned ()
@@ -45,13 +45,13 @@ Variable::getInvolvedConstraints () const
 int
 Variable::getIndex () const
 {
-  return _Id;
+  return _id;
 }
 
 void
 Variable::setIndex (int id)
 {
-  _Id = id;
+  _id = id;
 }
 
 int

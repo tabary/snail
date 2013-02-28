@@ -8,7 +8,25 @@ Constraint::Constraint (const string &name, int arity, Relation const &relation)
   myTuple = new int[_arity];
 }
 
- 
+
+int 
+Constraint::getIndex () const
+{
+   return _id;
+}
+
+void
+Constraint::setIndex (int id)
+{
+  _id = id;
+}
+
+std::string const &
+Constraint::getName () const
+{
+  return _name;
+}
+
 bool
 Constraint::isConsistent () const
 {
@@ -76,7 +94,7 @@ Constraint::seekSupport (Variable& x, int indexValue)
             cpt--;
 
           cout << "tuple [";
-          for (int i=0; i<_scope.size();i++)
+          for (int i=0; i< (int)_scope.size();i++)
             cout << myTuple[i]<<",";
           cout << "]" << endl;
        

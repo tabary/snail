@@ -12,6 +12,8 @@ class Constraint
 {
 private:
   std::string _name;
+  int _id;
+  
   int _arity;
 
   int _nbUnassignedVariable;
@@ -24,6 +26,10 @@ private:
   public:
   Constraint (const std::string &name, int arity, Relation const &relation); // The associated domain must be previously created
  
+  int getIndex () const;
+  void setIndex (int id);
+  
+  std::string const &getName () const;
   
   bool isConsistent () const;
   bool isValid (tuple t) const;

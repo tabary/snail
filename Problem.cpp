@@ -5,6 +5,25 @@ using namespace std;
 Problem::Problem () { }
 
 void
+Problem::consolidate ()
+{
+  for(int i=0;i< (int) _variablesCollection.size (); ++i){
+      _variablesCollection[i]->setIndex (i);
+    }
+  for(int i=0;i< (int) _constraintsCollection.size (); ++i){
+      _constraintsCollection[i]->setIndex (i);      
+      if (_constraintsCollection.size () == 0 || minArity > _constraintsCollection[i]->getArity ())
+        minArity = _constraintsCollection[i]->getArity ();
+      if (_constraintsCollection.size () == 0 || maxArity < _constraintsCollection[i]->getArity ())
+        maxArity = _constraintsCollection[i]->getArity ();      
+    }
+  
+  cout << "Problem is consolidated" << endl;
+}
+
+
+
+void
 Problem::setName (const string &name)
 {
   _name = name;
@@ -19,10 +38,6 @@ Problem::addVariable (Variable *variable)
 void
 Problem::addConstraint (Constraint *constraint)
 {
-  if (_constraintsCollection.size () == 0 || minArity > constraint->getArity ())
-    minArity = constraint->getArity ();
-  if (_constraintsCollection.size () == 0 || maxArity < constraint->getArity ())
-    maxArity = constraint->getArity ();
   _constraintsCollection.push_back (constraint);
 }
 

@@ -20,6 +20,8 @@ private:
 public:
   Problem ();
 
+  void consolidate();
+  
   void setName (const std::string &name);
 
   void addVariable (Variable *variable);

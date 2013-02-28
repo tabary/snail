@@ -27,10 +27,11 @@ main (int argc, char **argv)
       parser.setPreferredExpressionRepresentation (INFIX_C);
       parser.parse (argv[1]); // parse the input file
 
+       p.consolidate ();
+       
 #ifdef SHOWPROBLEM
       p.display ();
 #endif   
-
 
       Solver s (p);
       s.doSearch ();

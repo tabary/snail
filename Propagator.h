@@ -5,9 +5,6 @@
 #include "Constraint.h"
 
 
-class Constraint;
-
-
 class Propagator
 {
 private:
@@ -15,7 +12,7 @@ private:
 protected:
 
   std::vector <Constraint *> _constraints;
-  
+  bool* _recordedConstraints;
 
   typedef struct
   {
@@ -27,12 +24,12 @@ protected:
 
 
 public:
-  //Propagator (Problem & problem);
-Propagator ();
+  
+Propagator (int nbConstraints);
 
 void dealWith(Constraint *c);
 
-  virtual bool propagate (int variableIndex, int valueIndex, int depth) = 0;
+  virtual bool propagate (Variable* variable, int valueIndex, int depth) = 0;
   virtual void undoPropagation (int depth) = 0;
 };
 

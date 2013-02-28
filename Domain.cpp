@@ -108,7 +108,7 @@ int
 Domain::getUniquePresentIndex () const
 {
   assert (_nbRemovals == (int) _currentDomain.size () - 1);
-  for (int i = 0; i < (int) _currentDomain.size (); ++i)
+  for (unsigned int i = 0; i <  _currentDomain.size (); ++i)
     if (_currentDomain[i] == -1)
       return i;
   throw ("Unreachable Code");
@@ -118,7 +118,7 @@ Domain::getUniquePresentIndex () const
 int
 Domain::getNextPresentIndexAfter(int index) const
 {
-  for (int i = index+1; i < (int) _currentDomain.size (); ++i)
+  for (unsigned int i = index+1; i <  _currentDomain.size (); ++i)
     if (_currentDomain[i] == -1)
       return i;
   return -1;
@@ -127,7 +127,7 @@ Domain::getNextPresentIndexAfter(int index) const
 void
 Domain::reduceToIndexAtDepth (int indexValue, int depth)
 {
-  for (int i = 0; i < (int) _currentDomain.size (); ++i)
+  for (int i = 0; i < (int)  _currentDomain.size (); ++i)
     if (_currentDomain[i] == -1 && i != indexValue)
       {
         _currentDomain[i] = depth;
