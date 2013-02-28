@@ -170,23 +170,6 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
 }
 
 
-void
-Domain::initIterator()
-{
-  iterator = -1;
-}
-
-int
-Domain::nextIterator()
-{
-  cout << "iterator =" <<iterator;
-  iterator=getNextPresentIndexAfter(iterator);
-  cout << "next iterator =" << iterator;
-  return iterator;
-}
-
-
-
 ostream& operator<< (ostream &flux, const Domain &domain)
 {
   assert (domain._currentDomain.size () != 0);

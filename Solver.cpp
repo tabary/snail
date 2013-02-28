@@ -3,20 +3,20 @@
 #include "DomOnDDeg.h"
 #include "DomOnDeg.h"
 #include "BinaryForwardChecking.h"
-//#include "binaryAC3.h"
+#include "binaryAC3.h"
 #include "Lexico.h"
 using namespace std;
 
 Solver::Solver (Problem &problem) : _problem (problem), _nbFoundSolutions (0)
 {
   _variableHeuristic = new DomOnDDeg (problem.getVariablesCollection ());
-  _propagator = new BinaryForwardChecking (_problem.getNbConstraints ());
-  
+  //_propagator = new BinaryForwardChecking (_problem.getNbConstraints ());
+  _propagator = new BinaryAC3 (_problem.getNbConstraints ());
   vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
     for(unsigned int i=0; i<  constraints.size (); ++i)
       _propagator->dealWith(constraints[i]);
       
- //_propagator = new BinaryAC3 (_problem);
+
 
   //_variableHeuristic = new Dom(problem.getVariablesCollection());
   //_variableHeuristic = new Lexico(problem.getVariablesCollection());
@@ -114,8 +114,9 @@ Solver::doSearch ()
 
   while (!fullExploration)
     {
-
+      
       variableIndex = _variableHeuristic->chooseVariable ();
+            
       valueIndex = _problem.getVariable (variableIndex).getDomain ().getFirstPresent ();
 
       doAssignmentAtCurrentDepth (variableIndex, valueIndex, depth++);

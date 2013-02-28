@@ -22,6 +22,7 @@ private:
   Relation const &_relation;
 
   tuple myTuple; // temporary tuple
+  tuple myIndexTuple; // temporary tuple of value indexes 
 
   public:
   Constraint (const std::string &name, int arity, Relation const &relation); // The associated domain must be previously created

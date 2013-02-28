@@ -19,6 +19,7 @@ public:
   
   virtual bool propagate (Variable* variable, int valueIndex, int depth);
   virtual void undoPropagation (int depth);
+  virtual bool initialize();
 };
 
 #endif

@@ -31,6 +31,8 @@ void dealWith(Constraint *c);
 
   virtual bool propagate (Variable* variable, int valueIndex, int depth) = 0;
   virtual void undoPropagation (int depth) = 0;
+  
+  virtual bool initialize() = 0;
 };
 
 #endif

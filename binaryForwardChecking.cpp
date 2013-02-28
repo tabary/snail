@@ -3,7 +3,15 @@
 
 using namespace std;
 
-BinaryForwardChecking::BinaryForwardChecking (int nbConstraints) : Propagator (nbConstraints) { }
+BinaryForwardChecking::BinaryForwardChecking (int nbConstraints) : Propagator (nbConstraints) 
+{
+}
+
+bool
+BinaryForwardChecking::initialize()
+{
+  return true;
+}
 
 bool
 BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
@@ -16,7 +24,9 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
       Constraint & c = *(involvedConstraints[i]);
       if (!_recordedConstraints[c.getIndex ()] )
         continue;
-          
+ 
+      assert(c.getArity () == 2);
+      
       vector<Variable *> const &scope = c.getScope ();
       int positionOfFutureVariableInScope;
       tuple &t = c.getMyTuple ();

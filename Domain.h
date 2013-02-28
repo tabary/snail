@@ -18,7 +18,6 @@ private:
 
   int _nbRemovals;
   
-  int iterator;
 
 public:
   Domain (std::string const &name, int min, int max, int nbValues); // Limits are included
@@ -52,8 +51,6 @@ public:
   void restoreAllIndexAtDepth (int depth);
   void restoreUniqueIndexAtDepth (int index, int depth);
 
-  void initIterator();
-  int nextIterator();
   
   
   
