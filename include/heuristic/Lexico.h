@@ -1,6 +1,7 @@
 #ifndef DEF_LEXICO
 #define DEF_LEXICO
 
+#include <cassert>
 
 #include "VariableOrderingHeuristic.h"
 

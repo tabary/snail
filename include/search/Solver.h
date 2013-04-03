@@ -15,6 +15,7 @@
 
 #include "stack"
 
+#include <cassert>
 
 #define NB_MAX_SOLUTIONS 50000
 

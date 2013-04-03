@@ -3,7 +3,7 @@
 
 #include "stack"
 #include "Constraint.h"
-
+#include <cassert>
 
 class Propagator
 {

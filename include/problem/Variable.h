@@ -4,6 +4,8 @@
 #include "Domain.h"
 #include "Constraint.h"
 
+#include <cassert>
+
 class Constraint;
 
 class Variable

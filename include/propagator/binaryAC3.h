@@ -1,6 +1,9 @@
 #ifndef DEF_BINARYAC3
 #define DEF_BINARYAC3
 
+
+#include <cassert>
+
 #include "Propagator.h"
 #include "list"
 

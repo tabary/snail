@@ -4,7 +4,7 @@
 #include "Variable.h"
 #include "Constraint.h"
 
-
+#include <cassert>
 
 
 class Problem

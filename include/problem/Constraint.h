@@ -4,6 +4,7 @@
 #include "Relation.h"
 #include "Variable.h"
 
+#include <cassert>
 
 class Variable;
 

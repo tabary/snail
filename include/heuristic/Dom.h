@@ -1,6 +1,7 @@
 #ifndef DEF_DOM
 #define DEF_DOM
 
+#include <cassert>
 
 #include "VariableOrderingHeuristic.h"
 

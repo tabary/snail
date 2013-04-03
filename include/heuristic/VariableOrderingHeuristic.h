@@ -1,6 +1,8 @@
 #ifndef DEF_VARIABLE_ORDERING_HEURISTIC
 #define DEF_VARIABLE_ORDERING_HEURISTIC
 
+#include <cassert>
+
 #include "Variable.h"
 
 class VariableOrderingHeuristic

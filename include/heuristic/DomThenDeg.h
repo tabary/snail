@@ -1,6 +1,7 @@
 #ifndef DEF_DOM_THEN_DEG
 #define DEF_DOM_THEN_DEG
 
+#include <cassert>
 
 #include "VariableOrderingHeuristic.h"
 

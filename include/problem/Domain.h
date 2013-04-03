@@ -3,9 +3,8 @@
 
 #include <iostream>
 #include <vector>
-#include <assert.h>
 #include <string.h>
-
+#include <cassert>
 
 class Domain
 {
@@ -17,6 +16,11 @@ private:
   int* _removalsStack[2];
 
   int _nbRemovals;
+
+  int _firstPresentIndex;
+  int _lastPresentIndex;
+  int* _forwardCurrentDomain;
+  int* _backwardCurrentDomain;
   
 
 public:

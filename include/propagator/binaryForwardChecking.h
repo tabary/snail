@@ -1,6 +1,8 @@
 #ifndef DEF_BINARYFORWARDCHECKING
 #define DEF_BINARYFORMARDCHECKING
 
+#include <cassert>
+
 #include "Propagator.h"
 
 /* For the moment the forwardChecking class deals only with binary constraints  
