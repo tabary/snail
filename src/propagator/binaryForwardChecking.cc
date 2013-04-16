@@ -59,7 +59,7 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
                   propagationStack.push (v);
                   futureVariable->getDomain ().removeIndexAtDepth (j, depth);
 #ifdef TRACE  
-                  cout << "Propagation at depth " << v.depth << " of variable :" << v.variable->getName () << " with valueIndex " << v.valueIndex << endl;
+                  cout << "Propagation at depth " << v.depth << " of  :" << v.variable->getName () << " != " << v.variable->getDomain ().getValueOfIndex (v.valueIndex) << endl;
 #endif
                 }
             }

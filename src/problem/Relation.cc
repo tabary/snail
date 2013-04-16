@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Relation::Relation (const string &name, int tupleSize, int relType) : _name (name), _tupleSize (tupleSize)
+Relation::Relation (const string &name, int tupleSize, int relType, int nbTuples) : _name (name), _tupleSize (tupleSize)
 {
   assert (_tupleSize > 0);
   switch (relType)
@@ -27,6 +27,14 @@ Relation::addTuple (tuple const t)
   _tuplesCollection.push_back (myTuple);
 }
 
+ const std::vector<tuple>&
+ Relation::getTuplesCollection() const 
+ {
+   return _tuplesCollection;
+ }
+
+
+
 bool
 Relation::isEqual (tuple const t1, tuple const t2) const
 {
@@ -38,27 +46,43 @@ Relation::isEqual (tuple const t1, tuple const t2) const
   return true;
 }
 
-bool
-Relation::isValid (tuple const t) const
-{
-  return (_relType == REL_SUPPORT ? isPresent (t) : !isPresent (t));
-}
-
-bool
-Relation::isPresent (tuple const t) const
-{
-  for (unsigned int i = 0; i < _tuplesCollection.size (); ++i)
-    {
-      if (isEqual (_tuplesCollection[i], t))
-        return true;
-    }
-  return false;
-}
+//    bool
+//    Relation::isValid (tuple const t) const
+//    {
+//    return (_relType == REL_SUPPORT ? isPresent (t) : !isPresent (t));
+//    }
+//
+//    bool
+//    Relation::isPresent (tuple const t) const
+//    {
+//    for (unsigned int i = 0; i < _tuplesCollection.size (); ++i)
+//        {
+//        if (isEqual (_tuplesCollection[i], t))
+//            return true;
+//        }
+//    return false;
+//    }
 
 const string&
 Relation::getName ()
 {
   return _name;
+}
+
+int Relation::getRelType() const
+{
+   switch (_relType)
+    {
+    case REL_SUPPORT:
+      return 0;
+      break;
+    case REL_CONFLICT:
+      return 1;
+      break;
+    default:
+      throw ("unknown relation type");
+    }
+ 
 }
 
 ostream& operator<< (ostream &flux, const Relation &relation)

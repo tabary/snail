@@ -18,7 +18,7 @@ export EXEC_DIR = $(BIN_DIR)/$(EXEC)
 export CC = g++
 
 #standard options
-export OPT =-g -DTMPDEBUG   -DSHOWPROBLEM
+export OPT =-g -DTMPDEBUG    -DSHOWPROBLEM
 #debug options
 #export OPT=-g -DTMPDEBUG -DTRACE
 #competition options

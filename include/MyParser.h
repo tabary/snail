@@ -99,10 +99,10 @@ public:
     switch(relType)
     {
     case REL_SUPPORT:
-        myRelation = new Relation(name, arity,0);
+        myRelation = new Relation(name, arity,0, nbTuples);
         break;
     case REL_CONFLICT:
-        myRelation = new Relation(name, arity,1);
+        myRelation = new Relation(name, arity,1, nbTuples);
         break;
     case REL_SOFT:
            throw runtime_error("Not Supported");
@@ -182,12 +182,12 @@ public:
   }
   
   
-  Relation &getRelation(const string &reference)
+  Relation* getRelation(const string &reference)
   {
       for(int i=0; i< d_nbRelations; ++i)
       {
           if (d_relationsCollection[i]->getName() == reference)
-              return *(d_relationsCollection[i]);
+              return d_relationsCollection[i];
       }   
        throw runtime_error("Unreachable code");
   }

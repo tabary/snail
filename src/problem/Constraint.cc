@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Constraint::Constraint (const string &name, int arity, Relation const &relation) : _name (name), _arity (arity), _nbUnassignedVariable (arity), _relation (relation)
+Constraint::Constraint (const string &name, int arity, Relation* relation) : _name (name), _arity (arity), _nbUnassignedVariable (arity), _relation (relation)
 {
   assert (_arity >= 1);
   myTuple = new int[_arity];
@@ -10,16 +10,24 @@ Constraint::Constraint (const string &name, int arity, Relation const &relation)
 }
 
 
+void
+Constraint::consolidate (int id)
+{
+  _id=id;
+  _relType=_relation->getRelType();
+  const std::vector<tuple>& tuplesCollection = _relation->getTuplesCollection ();
+  for(int i=0; i< tuplesCollection.size ();++i){
+      tuple tmp = new int[_arity];
+     memcpy (tmp,tuplesCollection[i], sizeof (tmp[0]) * _arity);
+     _table.push_back (tmp);
+    }
+  
+}
+
 int 
 Constraint::getIndex () const
 {
    return _id;
-}
-
-void
-Constraint::setIndex (int id)
-{
-  _id = id;
 }
 
 std::string const &
@@ -39,17 +47,39 @@ Constraint::isConsistent () const
         return true;
       myTuple[i] = (_scope[i]->getDomain ()).getUniquePresentValue ();
     }
-  if (_relation.isValid (myTuple))
+  if (isValid (myTuple))
     return true;
   return false;
 }
 
 bool
-Constraint::isValid (tuple t) const
+Constraint::isEqual (tuple const t1, tuple const t2) const
 {
-  return _relation.isValid (t);
+  for (int j = 0; j < _arity ; ++j)
+    {
+      if (t1[j] != t2[j])
+        return false;
+    }
+  return true;
 }
 
+bool
+Constraint::isPresent (tuple t) const
+{
+  for(int i=0; i<_table.size (); ++i)
+    {
+      if (isEqual(t,_table[i]))
+        return true;
+    }
+    return false;
+}
+
+
+bool
+Constraint::isValid (tuple const t) const
+    {
+    return (_relType == 0 ? isPresent (t) : !isPresent (t));
+    }
 
 bool
 Constraint::seekSupport (Variable& x, int indexValue)
@@ -79,7 +109,7 @@ Constraint::seekSupport (Variable& x, int indexValue)
   
   while (cpt != -1)
     {
-      if (_relation.isValid(myTuple))
+      if (isValid(myTuple))
         return true;
       
         if (cpt != cptSkipped){
@@ -169,6 +199,6 @@ ostream& operator<< (ostream &flux, const Constraint &constraint)
     {
       flux << constraint._scope[i]->getName () << (i < constraint._arity - 1 ? "," : "");
     }
-  flux << "] with associated relation " << constraint._relation;
+  flux << "]" ;
   return flux;
 }

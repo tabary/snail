@@ -26,11 +26,13 @@ private:
   bool isPresent (tuple const t) const;
 
 public:
-  Relation (const std::string &name, int tupleSize, int relType);
+  Relation (const std::string &name, int tupleSize, int relType, int nbTuples);
 
   void addTuple (tuple const t);
 
-  bool isValid (tuple const t) const;
+  const std::vector<tuple>& getTuplesCollection() const;
+  int getRelType() const;
+//  bool isValid (tuple const t) const;
 
   const std::string & getName ();
 

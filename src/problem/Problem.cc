@@ -11,7 +11,7 @@ Problem::consolidate ()
       _variablesCollection[i]->setIndex (i);
     }
   for(int i=0;i< (int) _constraintsCollection.size (); ++i){
-      _constraintsCollection[i]->setIndex (i);      
+      _constraintsCollection[i]->consolidate (i);
       if (_constraintsCollection.size () == 0 || minArity > _constraintsCollection[i]->getArity ())
         minArity = _constraintsCollection[i]->getArity ();
       if (_constraintsCollection.size () == 0 || maxArity < _constraintsCollection[i]->getArity ())
