@@ -14,7 +14,6 @@ Domain::Domain (string const &name, int min, int max, int nbValues) : _name (nam
   _forwardCurrentDomain = new int[nbValues];
   _backwardCurrentDomain = new int[nbValues];
   
-  
   for(int i=0; i< nbValues; ++i){
       _forwardCurrentDomain[i]=i+1;
       _backwardCurrentDomain[i] = i-1;
@@ -190,6 +189,7 @@ Domain::reduceToIndexAtDepth (int indexValue, int depth)
       i = _forwardCurrentDomain[i];
      }
   _firstPresentIndex = indexValue;
+  _forwardCurrentDomain[indexValue] = -1;
  i = _lastPresentIndex;  
   while (i != indexValue){
       _currentDomain[i] = depth;
@@ -199,7 +199,7 @@ Domain::reduceToIndexAtDepth (int indexValue, int depth)
       i = _backwardCurrentDomain[i];
      }
   _lastPresentIndex = indexValue;
-   
+  _backwardCurrentDomain[indexValue] = -1;  
 //  for (int i = 0; i < (int)  _currentDomain.size (); ++i)
 //    if (_currentDomain[i] == -1 && i != indexValue)
 //      {
@@ -213,7 +213,7 @@ Domain::reduceToIndexAtDepth (int indexValue, int depth)
 void
 Domain::removeIndexAtDepth (int indexValue, int depth)
 {
-  assert (_currentDomain[indexValue] == -1);
+  assert (_currentDomain[indexValue] == -1 && !(_firstPresentIndex==-1 && _lastPresentIndex==-1));
   _currentDomain[indexValue] = depth;
   _removalsStack[0][_nbRemovals] = indexValue;
   _removalsStack[1][_nbRemovals] = depth;
@@ -248,59 +248,7 @@ Domain::restoreAllIndexAtDepth (int depth)
   while (_nbRemovals != 0 && _removalsStack[1][_nbRemovals - 1] == depth)
     {
       index = _removalsStack[0][_nbRemovals - 1];
-      _currentDomain[index] = -1;
-      _nbRemovals--;
-      
-      
-   if (  _firstPresentIndex == -1 &&  _lastPresentIndex == -1){
-      _firstPresentIndex = index;
-      _lastPresentIndex = index;
-      _forwardCurrentDomain[index] = -1;
-      _backwardCurrentDomain[index] = -1;
-      continue;
-    }
-  
-  if (index < _firstPresentIndex){
-      _forwardCurrentDomain[index] = _forwardCurrentDomain[_firstPresentIndex];
-      _backwardCurrentDomain[index] = -1;
-      _backwardCurrentDomain[_firstPresentIndex] = index;
-      _firstPresentIndex = index;
-      continue;
-    }
-  
-  if (index > _lastPresentIndex){ 
-     _backwardCurrentDomain[index] = _backwardCurrentDomain[_lastPresentIndex];
-      _forwardCurrentDomain[index] = -1;
-      _forwardCurrentDomain[_lastPresentIndex] = index;
-      _lastPresentIndex = index;
-      continue;
-    }
-  
-  
-  for(int i= index+1; i <= _lastPresentIndex; ++i){
-      if (_currentDomain[i] == -1){
-          _forwardCurrentDomain[index] = i;
-          _forwardCurrentDomain[_backwardCurrentDomain[i]]= index;
-          _backwardCurrentDomain[index] = _backwardCurrentDomain[i];
-          _backwardCurrentDomain[i] = index;
-        }
-    }
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+      restoreUniqueIndexAtDepth(index,depth);
     }
 }
 
@@ -314,6 +262,7 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
   _nbRemovals--;
   
   
+  
   if (  _firstPresentIndex == -1 &&  _lastPresentIndex == -1){
       _firstPresentIndex = index;
       _lastPresentIndex = index;
@@ -323,7 +272,7 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
     }
   
   if (index < _firstPresentIndex){
-      _forwardCurrentDomain[index] = _forwardCurrentDomain[_firstPresentIndex];
+      _forwardCurrentDomain[index] = _firstPresentIndex;
       _backwardCurrentDomain[index] = -1;
       _backwardCurrentDomain[_firstPresentIndex] = index;
       _firstPresentIndex = index;
@@ -331,7 +280,7 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
     }
   
   if (index > _lastPresentIndex){ 
-     _backwardCurrentDomain[index] = _backwardCurrentDomain[_lastPresentIndex];
+     _backwardCurrentDomain[index] = _lastPresentIndex;
       _forwardCurrentDomain[index] = -1;
       _forwardCurrentDomain[_lastPresentIndex] = index;
       _lastPresentIndex = index;
@@ -345,6 +294,7 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
           _forwardCurrentDomain[_backwardCurrentDomain[i]]= index;
           _backwardCurrentDomain[index] = _backwardCurrentDomain[i];
           _backwardCurrentDomain[i] = index;
+          return;
         }
     }
   
