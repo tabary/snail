@@ -4,7 +4,7 @@ using namespace std;
 
 Domain::Domain (string const &name, int min, int max, int nbValues) : _name (name), _nbRemovals (0), _firstPresentIndex(0), _lastPresentIndex(nbValues-1)
 {
-  assert (max >= min);
+  assert (max >= min && (max-min+1) == nbValues);
   for (int i = min; i <= max; ++i)
     _initialDomain.push_back (i);
   _currentDomain.insert (_currentDomain.begin (), _initialDomain.size (), -1);
@@ -20,8 +20,6 @@ Domain::Domain (string const &name, int min, int max, int nbValues) : _name (nam
     }
   _forwardCurrentDomain[nbValues-1]=-1;
   _backwardCurrentDomain[0] = -1;
-      
-  
 }
 
 Domain::Domain (string const &name, int nbValues) : _name (name), _nbRemovals (0), _firstPresentIndex(-1), _lastPresentIndex(-1)
@@ -31,15 +29,6 @@ Domain::Domain (string const &name, int nbValues) : _name (name), _nbRemovals (0
 
   _forwardCurrentDomain = new int[nbValues];
   _backwardCurrentDomain = new int[nbValues];
-  
-  
-  for(int i=0; i< nbValues; ++i){
-      _forwardCurrentDomain[i]=i+1;
-      _backwardCurrentDomain[i] = i-1;
-    }
-  _forwardCurrentDomain[nbValues-1]=-1;
-  _backwardCurrentDomain[0] = -1;
-
 }
 
 Domain::Domain (const Domain& d) : _name (d._name), _initialDomain (d._initialDomain), _currentDomain (d._currentDomain), _nbRemovals (d._nbRemovals),_firstPresentIndex(d._firstPresentIndex), _lastPresentIndex(d._lastPresentIndex) 
@@ -55,22 +44,35 @@ Domain::Domain (const Domain& d) : _name (d._name), _initialDomain (d._initialDo
 
   memcpy (_forwardCurrentDomain, d._forwardCurrentDomain, _initialDomain.size () * sizeof (int));
   memcpy (_backwardCurrentDomain, d._backwardCurrentDomain, _initialDomain.size () * sizeof (int));
-
-
-
 }
 
 void
 Domain::addValue (int v)
-{
+{  
+  assert(_forwardCurrentDomain != NULL && _backwardCurrentDomain != NULL);
+  
   _initialDomain.push_back (v);
   _currentDomain.push_back (-1);
-
-  if (_initialDomain.size () > 0)
+  
+  if (_firstPresentIndex == -1 && _lastPresentIndex == -1){
     _firstPresentIndex = 0;
+    _lastPresentIndex = 0;
+    _forwardCurrentDomain[0]= -1;
+    _backwardCurrentDomain[0]= -1;
+    }
+  else
+    {
+      assert(_lastPresentIndex+1 ==_initialDomain.size ()-1 );
+      _forwardCurrentDomain[_lastPresentIndex]=_initialDomain.size ()-1 ;
+      _forwardCurrentDomain[_initialDomain.size ()-1]= -1;
+      
+      _backwardCurrentDomain[_initialDomain.size ()-1]=_lastPresentIndex ;
     
-    _lastPresentIndex = _initialDomain.size ()-1;
-  }
+      _lastPresentIndex = _initialDomain.size ()-1;
+    }
+}
+
+
 
 void
 Domain::addIntervalValue (int min, int max)
@@ -78,15 +80,8 @@ Domain::addIntervalValue (int min, int max)
   assert (max >= min);
   for (int i = min; i <= max; i++)
     {
-      _initialDomain.push_back (i);
-      _currentDomain.push_back (-1);
+      addValue(i);
     }
-  
-  if (_initialDomain.size() > 0)
-    _firstPresentIndex = 0;
-  
-      _lastPresentIndex = _initialDomain.size ()-1;
-  
 }
 
 vector<int> const &
@@ -122,7 +117,6 @@ Domain::getNbInitialValues () const
 int
 Domain::getNbCurrentValues () const
 {
-
   return (_initialDomain.size () - _nbRemovals);
 }
 
@@ -134,33 +128,27 @@ Domain::getValueOfIndex (int index) const
 }
 
 int
-Domain::getFirstPresent () const
+Domain::getFirstPresentIndex () const
 {
   return _firstPresentIndex;
-    
-//  for (unsigned int i = 0; i < _currentDomain.size (); ++i)
-//    if (_currentDomain[i] == -1)
-//      return i;
-//  throw ("Unreachable Code");
 }
 
 int
 Domain::getUniquePresentValue () const
 {
   assert (_nbRemovals == (int) _currentDomain.size () - 1);
+  assert (_firstPresentIndex == _lastPresentIndex);
+  assert ( _forwardCurrentDomain[_firstPresentIndex]==-1 && _backwardCurrentDomain[_firstPresentIndex]==-1);
   return _initialDomain[_firstPresentIndex];
-  //return _initialDomain[getUniquePresentIndex()];
 }
 
 int
 Domain::getUniquePresentIndex () const
 {
   assert (_nbRemovals == (int) _currentDomain.size () - 1);
+  assert (_firstPresentIndex == _lastPresentIndex);
+  assert ( _forwardCurrentDomain[_firstPresentIndex]==-1 && _backwardCurrentDomain[_firstPresentIndex]==-1);
   return _firstPresentIndex;
-//  for (unsigned int i = 0; i <  _currentDomain.size (); ++i)
-//    if (_currentDomain[i] == -1)
-//      return i;
-//  throw ("Unreachable Code");
 }
 
 
@@ -169,10 +157,6 @@ Domain::getNextPresentIndexAfter(int index) const
 {
   assert(_currentDomain[index] == -1);
   return _forwardCurrentDomain[index];
-//  for (unsigned int i = index+1; i <  _currentDomain.size (); ++i)
-//    if (_currentDomain[i] == -1)
-//      return i;
-//  return -1;
 }
 
 void
@@ -200,14 +184,6 @@ Domain::reduceToIndexAtDepth (int indexValue, int depth)
      }
   _lastPresentIndex = indexValue;
   _backwardCurrentDomain[indexValue] = -1;  
-//  for (int i = 0; i < (int)  _currentDomain.size (); ++i)
-//    if (_currentDomain[i] == -1 && i != indexValue)
-//      {
-//        _currentDomain[i] = depth;
-//        _removalsStack[0][_nbRemovals] = i;
-//        _removalsStack[1][_nbRemovals] = depth;
-//        _nbRemovals++;
-//      }
 }
 
 void
@@ -261,8 +237,6 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
   _currentDomain[index] = -1;
   _nbRemovals--;
   
-  
-  
   if (  _firstPresentIndex == -1 &&  _lastPresentIndex == -1){
       _firstPresentIndex = index;
       _lastPresentIndex = index;
@@ -286,7 +260,6 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
       _lastPresentIndex = index;
       return;
     }
-  
   
   for(int i= index+1; i <= _lastPresentIndex; ++i){
       if (_currentDomain[i] == -1){

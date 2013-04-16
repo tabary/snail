@@ -112,7 +112,7 @@ Solver::doSearch ()
       
       variableIndex = _variableHeuristic->chooseVariable ();
             
-      valueIndex = _problem.getVariable (variableIndex).getDomain ().getFirstPresent ();
+      valueIndex = _problem.getVariable (variableIndex).getDomain ().getFirstPresentIndex ();
 
       doAssignmentAtCurrentDepth (variableIndex, valueIndex, depth++);
 

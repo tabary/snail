@@ -68,7 +68,7 @@ Constraint::seekSupport (Variable& x, int indexValue)
           myTuple[i] = x.getDomain ().getValueOfIndex (indexValue);
         }
       else {
-          myIndexTuple[i] =_scope[i]->getDomain ().getFirstPresent (); 
+          myIndexTuple[i] =_scope[i]->getDomain ().getFirstPresentIndex (); 
           myTuple[i] = _scope[i]->getDomain ().getValueOfIndex (myIndexTuple[i]);
         }
     }
@@ -111,7 +111,7 @@ Constraint::seekSupport (Variable& x, int indexValue)
               for (int i=cpt+1; i < _scope.size (); ++i){
                   if (i == cptSkipped)
                     continue;
-                  myIndexTuple[i] = _scope[i]->getDomain ().getFirstPresent (); 
+                  myIndexTuple[i] = _scope[i]->getDomain ().getFirstPresentIndex (); 
                   myTuple[i] = _scope[i]->getDomain ().getValueOfIndex (myIndexTuple[i]);
                 }
               cpt = _scope.size ()-1;

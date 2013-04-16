@@ -42,7 +42,7 @@ public:
   int getNbCurrentValues () const;
 
   int getValueOfIndex (int index) const;
-  int getFirstPresent () const;
+  int getFirstPresentIndex () const;
   int getUniquePresentValue () const;
   int getUniquePresentIndex () const;
   
