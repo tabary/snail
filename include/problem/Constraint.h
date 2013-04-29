@@ -6,6 +6,9 @@
 
 #include <cassert>
 
+#include<string.h>
+
+
 class Variable;
 
 
@@ -18,7 +21,9 @@ private:
   int _id;
   
   int _arity;
-  int _relType;
+  
+  RelType _relType;
+  
   
   int _nbUnassignedVariable;
 

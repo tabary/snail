@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include <cassert>
+#include "parser/XMLParser_constants.h"
 
 typedef int* tuple;
 
@@ -16,22 +17,17 @@ private:
   std::vector<tuple> _tuplesCollection;
   int _tupleSize;
 
-  enum relationType
-  {
-    REL_CONFLICT, REL_SUPPORT, REL_SOFT
-  };
-  relationType _relType;
-
-  bool isEqual (tuple const t1, tuple const t2) const;
-  bool isPresent (tuple const t) const;
+  
+  RelType _relType;
 
 public:
-  Relation (const std::string &name, int tupleSize, int relType, int nbTuples);
+  Relation (const std::string &name, int tupleSize, RelType relType, int nbTuples);
+  ~Relation();
 
   void addTuple (tuple const t);
 
   const std::vector<tuple>& getTuplesCollection() const;
-  int getRelType() const;
+  RelType getRelType() const;
 //  bool isValid (tuple const t) const;
 
   const std::string & getName ();

@@ -5,12 +5,15 @@
 
 #include <cassert>
 
+#include <string>
+
 using namespace std;
 
 int
 main (int argc, char **argv)
 {
-
+  
+  
   clock_t initialTime = clock ();
 
   cout << "Hello from SnaiL \n";

@@ -5,6 +5,8 @@
 #include "Constraint.h"
 #include <cassert>
 
+#include <string.h>
+
 class Propagator
 {
 private:

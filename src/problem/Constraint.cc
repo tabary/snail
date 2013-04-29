@@ -14,7 +14,8 @@ void
 Constraint::consolidate (int id)
 {
   _id=id;
-  _relType=_relation->getRelType();
+  _relType =_relation->getRelType();
+     
   const std::vector<tuple>& tuplesCollection = _relation->getTuplesCollection ();
   for(int i=0; i< tuplesCollection.size ();++i){
       tuple tmp = new int[_arity];
@@ -22,6 +23,7 @@ Constraint::consolidate (int id)
      _table.push_back (tmp);
     }
   
+  _relation=NULL;
 }
 
 int 
@@ -78,7 +80,7 @@ Constraint::isPresent (tuple t) const
 bool
 Constraint::isValid (tuple const t) const
     {
-    return (_relType == 0 ? isPresent (t) : !isPresent (t));
+    return (_relType == REL_CONFLICT ? !isPresent (t) : isPresent (t));
     }
 
 bool

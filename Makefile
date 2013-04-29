@@ -18,9 +18,9 @@ export EXEC_DIR = $(BIN_DIR)/$(EXEC)
 export CC = g++
 
 #standard options
-export OPT =-g -DTMPDEBUG    -DSHOWPROBLEM
+export OPT =-g -DTMPDEBUG  
 #debug options
-#export OPT=-g -DTMPDEBUG -DTRACE
+#export OPT=-g -DTMPDEBUG -DSHOWPROBLEM -DTRACE
 #competition options
 #export OPT=-O3 -DNDEBUG
 
@@ -59,6 +59,7 @@ $(MODULES):
 
 clean:
 	rm -rf $(OBJ_DIR)/*.o
+	rm -rf $(EXEC_DIR)
 
 mrproper: clean
 	rm -rf $(EXEC_DIR)

@@ -95,21 +95,13 @@ public:
        
         Relation * myRelation;
        //myRelation = new Relation(name, arity,relType);
-            
-    switch(relType)
-    {
-    case REL_SUPPORT:
-        myRelation = new Relation(name, arity,0, nbTuples);
-        break;
-    case REL_CONFLICT:
-        myRelation = new Relation(name, arity,1, nbTuples);
-        break;
-    case REL_SOFT:
+        
+        if (relType == REL_SOFT)
            throw runtime_error("Not Supported");
-      break;
-    default:
-      throw runtime_error("unknown relation type");
-    }
+        
+        myRelation = new Relation(name, arity,relType, nbTuples);
+   
+   
     d_currentRelation = idRel;
     d_relationsCollection[idRel] = myRelation;
   }
