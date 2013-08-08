@@ -1,11 +1,11 @@
-#include "Solver.h"
-#include "MyParser.h"
 #include <time.h>
 #include <iomanip>
-
 #include <cassert>
 
 #include <string>
+
+#include "Solver.hh"
+#include "MyParser.hh"
 
 using namespace std;
 
@@ -32,8 +32,6 @@ main (int argc, char **argv)
       parser.setPreferredExpressionRepresentation (INFIX_C);
       parser.parse (argv[1]); // parse the input file
 
-       p.consolidate ();
-       
 #ifdef SHOWPROBLEM
       p.display ();
 #endif   

@@ -1,31 +1,27 @@
 #Makefile for snail :
 
-
-ROOT := $(shell pwd)
-
-
 #Set up directories
-export SRC_DIR = $(ROOT)/src
-export INC_DIR = $(ROOT)/include
-export OBJ_DIR = $(ROOT)/obj
-export BIN_DIR = $(ROOT)/bin
+export SRC_DIR = ./src
+export INC_DIR = $(SRC_DIR)/include
+export OBJ_DIR = ./obj
+export BIN_DIR = ./bin
 
 #Set up project
 export EXEC = snail
-export EXEC_DIR = $(BIN_DIR)/$(EXEC)
 
 # Define compilation flags  
-export CC = g++
+export CC = ~/tools/bin/g++ 
 
 #standard options
-export OPT =-g -DTMPDEBUG  
+#export OPT =-g -DTMPDEBUG  
 #debug options
-#export OPT=-g -DTMPDEBUG -DSHOWPROBLEM -DTRACE
+export OPT=-g -DTMPDEBUG -DSHOWPROBLEM 
+#-DTRACE
 #competition options
 #export OPT=-O3 -DNDEBUG
 
-export CXXFLAGS =-Wall $(OPT)
-export LDFLAGS=-L/opt/local/lib -lxml2 -lz -lpthread -liconv -lm
+export CXXFLAGS= -std=c++11 -Wall $(OPT)
+export LIBS= -L$(HOME)/tools/lib -lxml2 -lz -lpthread -liconv -lm -lstdc++
 INC = -I$(INC_DIR)
 INC+= -I$(INC_DIR)/parser 
 INC+= -I$(INC_DIR)/problem 
@@ -33,29 +29,34 @@ INC+= -I$(INC_DIR)/heuristic
 INC+= -I$(INC_DIR)/propagator
 INC+= -I$(INC_DIR)/search
 
-INC+= -I/opt/local/include/libxml2
+INC+=-I $(HOME)/tools/include/libxml2
 export INC
 
-MODULES = problem heuristic propagator search
+HEADER=$(wildcard $(INC_DIR)/*.hh $(INC_DIR)/parser/*.hh $(INC_DIR)/problem/*.hh $(INC_DIR)/search/*.hh $(INC_DIR)/heuristic/*.hh $(INC_DIR)/propagator/*.hh )
+SRC= $(wildcard $(SRC_DIR)/*.cc $(SRC_DIR)/problem/*.cc $(SRC_DIR)/search/*.cc $(SRC_DIR)/heuristic/*.cc $(SRC_DIR)/propagator/*.cc )
 
+OBJ=$(addprefix obj/,$(notdir $(SRC:.cc=.o)))
 
-all: $(EXEC_DIR)
+all: $(OBJ)
+	g++ -Wall $(OPT) -o $(BIN_DIR)/$(EXEC) $(OBJ) $(LIBS) 
 
-$(EXEC_DIR): $(OBJ_DIR)/snail.o $(MODULES) 
-	$(CC) $(LDFLAGS) $(CXXFLAGS) -o $@ $(wildcard *.o $(OBJ_DIR)/*.o)
+obj/%.o: src/%.cc $(HEADER)
+	g++ $(CXXFLAGS) $(INC) -c $< -o $@
 
-$(OBJ_DIR)/snail.o: $(INC_DIR)/search/Solver.h \
-                    $(INC_DIR)/MyParser.h
+obj/%.o: src/parser/%.cc $(HEADER)
+	g++ $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
 
+obj/%.o: src/problem/%.cc $(HEADER)
+	g++ $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
 
-$(OBJ_DIR)/snail.o: $(SRC_DIR)/snail.cc
-	$(CC) $(INC) $(CXXFLAGS) -o $@ -c $<	
+obj/%.o: src/search/%.cc $(HEADER)
+	g++ $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
 
-$(MODULES): 
-	@cd $(SRC_DIR)/$@ ; \
-        make  -f makefile.mk ; \
-        cd $(ROOT) 
-        
+obj/%.o: src/heuristic/%.cc $(HEADER)
+	g++ $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
+
+obj/%.o: src/propagator/%.cc $(HEADER)
+	g++ $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)/*.o

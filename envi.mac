@@ -1,0 +1,2 @@
+PATH=$HOME/tools/bin:$PATH
+export DYLD_LIBRARY_PATH=$HOME/tools/lib:$DYLD_LIBRARY_PATH

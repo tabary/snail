@@ -1,4 +1,4 @@
-#include "Propagator.h"
+#include "Propagator.hh"
 
 using namespace std;
 

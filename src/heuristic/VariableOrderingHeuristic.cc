@@ -1,7 +1,7 @@
-#include "VariableOrderingHeuristic.h"
+#include "VariableOrderingHeuristic.hh"
 
 using namespace std;
 
-VariableOrderingHeuristic::VariableOrderingHeuristic (std::vector <Variable*> &variables) : _variablesCollection (variables) {
+VariableOrderingHeuristic::VariableOrderingHeuristic (std::vector <Variable*> const &variables) : _variablesCollection (variables) {
  }
 

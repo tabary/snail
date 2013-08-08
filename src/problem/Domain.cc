@@ -1,12 +1,13 @@
-#include "Domain.h"
+#include "Domain.hh"
 
 using namespace std;
 
-Domain::Domain (string const &name, int min, int max, int nbValues) : _name (name), _nbRemovals (0), _firstPresentIndex(0), _lastPresentIndex(nbValues-1)
+Domain::Domain (string const &name, int domainId, int min, int max, int nbValues) : _name (name),  _id(domainId),_nbRemovals (0), _firstPresentIndex(0), _lastPresentIndex(nbValues-1) 
 {
-  assert (max >= min && (max-min+1) == nbValues);
-  for (int i = min; i <= max; ++i)
-    _initialDomain.push_back (i);
+  assert (max >= min && (max-min+1) == nbValues); 
+  
+  for (auto i = min; i <= max; ++i)
+   _initialDomain.push_back (i);
   _currentDomain.insert (_currentDomain.begin (), _initialDomain.size (), -1);
   _removalsStack[0] = new int [nbValues];
   _removalsStack[1] = new int [nbValues];
@@ -14,7 +15,7 @@ Domain::Domain (string const &name, int min, int max, int nbValues) : _name (nam
   _forwardCurrentDomain = new int[nbValues];
   _backwardCurrentDomain = new int[nbValues];
   
-  for(int i=0; i< nbValues; ++i){
+  for(auto i=0; i< nbValues; ++i){
       _forwardCurrentDomain[i]=i+1;
       _backwardCurrentDomain[i] = i-1;
     }
@@ -22,7 +23,7 @@ Domain::Domain (string const &name, int min, int max, int nbValues) : _name (nam
   _backwardCurrentDomain[0] = -1;
 }
 
-Domain::Domain (string const &name, int nbValues) : _name (name), _nbRemovals (0), _firstPresentIndex(-1), _lastPresentIndex(-1)
+Domain::Domain (string const &name, int domainId, int nbValues) : _name (name), _id(domainId), _nbRemovals (0), _firstPresentIndex(-1), _lastPresentIndex(-1)
 {
   _removalsStack[0] = new int [nbValues];
   _removalsStack[1] = new int [nbValues];
@@ -31,7 +32,7 @@ Domain::Domain (string const &name, int nbValues) : _name (name), _nbRemovals (0
   _backwardCurrentDomain = new int[nbValues];
 }
 
-Domain::Domain (const Domain& d) : _name (d._name), _initialDomain (d._initialDomain), _currentDomain (d._currentDomain), _nbRemovals (d._nbRemovals),_firstPresentIndex(d._firstPresentIndex), _lastPresentIndex(d._lastPresentIndex) 
+Domain::Domain (const Domain& d) : _name (d._name), _id(d._id), _initialDomain (d._initialDomain), _currentDomain (d._currentDomain), _nbRemovals (d._nbRemovals),_firstPresentIndex(d._firstPresentIndex), _lastPresentIndex(d._lastPresentIndex) 
 {
   _removalsStack[0] = new int [_initialDomain.size ()];
   _removalsStack[1] = new int [_initialDomain.size ()];
@@ -46,10 +47,21 @@ Domain::Domain (const Domain& d) : _name (d._name), _initialDomain (d._initialDo
   memcpy (_backwardCurrentDomain, d._backwardCurrentDomain, _initialDomain.size () * sizeof (int));
 }
 
+Domain::~Domain ()
+{
+  _name.~basic_string ();
+  delete [] _removalsStack[0];
+  delete [] _removalsStack[1];
+  delete [] _forwardCurrentDomain;
+  delete [] _backwardCurrentDomain;
+}
+
+
 void
 Domain::addValue (int v)
 {  
   assert(_forwardCurrentDomain != NULL && _backwardCurrentDomain != NULL);
+  assert(std::find(_initialDomain.begin(), _initialDomain.end(), v)==_initialDomain.end());
   
   _initialDomain.push_back (v);
   _currentDomain.push_back (-1);
@@ -62,7 +74,7 @@ Domain::addValue (int v)
     }
   else
     {
-      assert(_lastPresentIndex+1 ==_initialDomain.size ()-1 );
+      assert(_lastPresentIndex+1 == (int) _initialDomain.size ()-1 );
       _forwardCurrentDomain[_lastPresentIndex]=_initialDomain.size ()-1 ;
       _forwardCurrentDomain[_initialDomain.size ()-1]= -1;
       
@@ -73,24 +85,29 @@ Domain::addValue (int v)
 }
 
 
-
 void
 Domain::addIntervalValue (int min, int max)
 {
   assert (max >= min);
-  for (int i = min; i <= max; i++)
+  for (auto i = min; i <= max; ++i)
     {
       addValue(i);
     }
 }
 
-vector<int> const &
+unsigned int 
+Domain::getDomainId () const
+{
+  return _id;
+}
+
+const vector<int>  &
 Domain::getInitialDomain () const
 {
   return _initialDomain;
 }
 
-vector<int> const &
+const vector<int>  &
 Domain::getCurrentDomain () const
 {
   return _currentDomain;
@@ -276,13 +293,21 @@ Domain::restoreUniqueIndexAtDepth (int index, int depth)
 
 ostream& operator<< (ostream &flux, const Domain &domain)
 {
-  assert (domain._currentDomain.size () != 0);
-  flux << domain._name << ":[";
+  assert (domain._currentDomain.size () != 0 &&domain._initialDomain.size () != 0  );
+  flux << endl <<  domain._name << " initial:[";
+  for (unsigned int i = 0; i < domain._initialDomain.size (); ++i)
+    {
+      flux << domain._initialDomain[i];
+      flux << (i != domain._initialDomain.size () - 1 ? "," : "");
+    }
+  flux << "]";
+  
+  flux << endl <<  domain._name << " current:[";
   for (unsigned int i = 0; i < domain._currentDomain.size (); ++i)
     {
       flux << domain._currentDomain[i];
       flux << (i != domain._currentDomain.size () - 1 ? "," : "");
     }
-  flux << "]";
+  flux << "]" << endl;
   return flux;
 }

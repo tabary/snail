@@ -1,24 +1,21 @@
-#include "Solver.h"
+#include "Solver.hh"
 
 using namespace std;
 
 Solver::Solver (Problem &problem) : _problem (problem), _nbFoundSolutions (0)
 {
-  _variableHeuristic = new DomOnDDeg (problem.getVariablesCollection ());
- _propagator = new BinaryForwardChecking (_problem.getNbConstraints ());
- // _propagator = new BinaryAC3 (_problem.getNbConstraints ());
+  _propagator = new BinaryForwardChecking (_problem.getNbConstraints ());
+// // _propagator = new BinaryAC3 (_problem.getNbConstraints ());
   vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
-    for(unsigned int i=0; i<  constraints.size (); ++i)
-      _propagator->dealWith(constraints[i]);
+    for(size_t i(0); i<  constraints.size (); ++i)
+       _propagator->dealWith(constraints[i]);
       
-
-
-  //_variableHeuristic = new Dom(problem.getVariablesCollection());
+  _variableHeuristic = new Dom(problem.getVariablesCollection());
   //_variableHeuristic = new Lexico(problem.getVariablesCollection());
 }
 
 void
-Solver::doAssignmentAtCurrentDepth (int variableIndex, int valueIndex, int depth)
+Solver::doAssignmentAtCurrentDepth (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
   Variable &v = _problem.getVariable (variableIndex);
 #ifdef TRACE  
@@ -29,7 +26,7 @@ Solver::doAssignmentAtCurrentDepth (int variableIndex, int valueIndex, int depth
 }
 
 void
-Solver::undoAssignment (int variableIndex, int valueIndex, int depth)
+Solver::undoAssignment (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
   Variable &v = _problem.getVariable (variableIndex);
 #ifdef TRACE
@@ -43,7 +40,7 @@ Solver::undoAssignment (int variableIndex, int valueIndex, int depth)
 }
 
 void
-Solver::tryRefutation (int variableIndex, int valueIndex, int depth)
+Solver::tryRefutation (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
   Variable &v = _problem.getVariable (variableIndex);
 #ifdef TRACE
@@ -53,7 +50,7 @@ Solver::tryRefutation (int variableIndex, int valueIndex, int depth)
 }
 
 void
-Solver::undoRefutation (int variableIndex, int valueIndex, int depth)
+Solver::undoRefutation (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
   Variable &v = _problem.getVariable (variableIndex);
 
@@ -63,31 +60,32 @@ Solver::undoRefutation (int variableIndex, int valueIndex, int depth)
   v.getDomain ().restoreUniqueIndexAtDepth (valueIndex, depth);
 }
 
-bool
-Solver::checkConsistency (int variableIndex, int valueIndex, int depth)
-{
-  //    vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
-  vector<Constraint *> const &constraints = _problem.getVariable (variableIndex).getInvolvedConstraints ();
-  // Check only the consistency where variableIndex is involved
-  for (unsigned int i = 0; i < constraints.size (); ++i)
-    {
-      if (!constraints[i]->isConsistent ())
-        return false;
-    }
-  return true;
-}
+//bool
+//Solver::checkConsistency (int variableIndex, int valueIndex, int depth)
+//{
+//  //    vector<Constraint *> const &constraints = _problem.getConstraintsCollection();
+//  vector<Constraint *> const &constraints = _problem.getVariable (variableIndex).getInvolvedConstraints ();
+//  // Check only the consistency where variableIndex is involved
+//  for (unsigned int i = 0; i < constraints.size (); ++i)
+//    {
+//      if (!constraints[i]->isConsistent ())
+//        return false;
+//    }
+//  return true;
+//}
 
 bool
-Solver::checkConsistencyAfterAssignement (int variableIndex, int valueIndex, int depth)
+Solver::checkConsistencyAfterAssignement (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
  return _propagator->propagate (&(_problem.getVariable (variableIndex)), valueIndex, depth);
+ //return checkConsistency(variableIndex,valueIndex,depth);
  
 }
 
 bool
-Solver::checkConsistencyAfterRefutation (int variableIndex, int valueIndex, int depth)
+Solver::checkConsistencyAfterRefutation (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
-  return checkConsistency (variableIndex, valueIndex, depth);
+  return (!_problem.getVariable(variableIndex).hasEmptyDomain ());
 }
 
 void
@@ -95,10 +93,10 @@ Solver::doSearch ()
 {
   cout << "************** BEGIN SEARCH ************" << endl;
 
-  int depth (0);
+  unsigned int depth (0);
 
-  int variableIndex (-1);
-  int valueIndex (-1);
+  unsigned int variableIndex;
+  unsigned int valueIndex;
 
   decision d;
 
@@ -110,8 +108,7 @@ Solver::doSearch ()
   while (!fullExploration)
     {
       
-      variableIndex = _variableHeuristic->chooseVariable ();
-            
+      variableIndex = _variableHeuristic->chooseVariable ().getIndex ();   
       valueIndex = _problem.getVariable (variableIndex).getDomain ().getFirstPresentIndex ();
 
       doAssignmentAtCurrentDepth (variableIndex, valueIndex, depth++);

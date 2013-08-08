@@ -1,4 +1,4 @@
-#include "BinaryForwardChecking.h"
+#include "BinaryForwardChecking.hh"
 
 
 using namespace std;
@@ -19,7 +19,7 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
   variableValue v;
 
   vector <Constraint *> const & involvedConstraints = variable->getInvolvedConstraints ();
-  for (int i = 0; i < (int) involvedConstraints.size (); ++i)
+  for (size_t i(0); i < involvedConstraints.size (); ++i)
     {
       Constraint & c = *(involvedConstraints[i]);
       if (!_recordedConstraints[c.getIndex ()] )
@@ -29,7 +29,7 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
       
       vector<Variable *> const &scope = c.getScope ();
       int positionOfFutureVariableInScope;
-      tuple &t = c.getMyTuple ();
+      const snail::tuple &t = c.getMyTuple ();
 
       // Init of the tuple with the assigned variable and determine the index of the second variable (unassigned variable)
       if (scope[0]== variable)
@@ -46,7 +46,7 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
       vector<int> const &currentDomainOfFutureVariable = scope[positionOfFutureVariableInScope]->getDomain ().getCurrentDomain ();
       Variable* futureVariable = scope[positionOfFutureVariableInScope];
 
-      for (int j = 0; j < (int) currentDomainOfFutureVariable.size (); ++j)
+      for (size_t j(0); j < currentDomainOfFutureVariable.size (); ++j)
         {
           if (currentDomainOfFutureVariable[j] == -1)
             {
@@ -79,10 +79,10 @@ BinaryForwardChecking::undoPropagation (int depth)
     {
       v = propagationStack.top ();
       if (v.depth < depth)
-        break;
+        return;
       propagationStack.pop ();
 #ifdef TRACE  
-      cout << "Undo Propagation at depth " << depth << " of variable :" << v.variable->getName () << " with value " << v.valueIndex << endl;
+      cout << "Undo Propagation at depth " << depth << " of variable :" << v.variable->getName () << " with value " << v.variable->getDomain ().getValueOfIndex (v.valueIndex) << endl;
 #endif
       v.variable->getDomain ().restoreUniqueIndexAtDepth (v.valueIndex, v.depth);
     }

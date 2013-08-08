@@ -1,14 +1,14 @@
-#include "Lexico.h"
+#include "Lexico.hh"
 
 using namespace std;
 
-Lexico::Lexico (vector <Variable*> &variables) : VariableOrderingHeuristic (variables) { }
+Lexico::Lexico (vector <Variable*> const &variables) : VariableOrderingHeuristic (variables) { }
 
-int
-Lexico::chooseVariable ()
+Variable &
+Lexico::chooseVariable () const
 {
-  for (unsigned int i = 0; i < _variablesCollection.size (); ++i)
+  for (size_t i(0); i < _variablesCollection.size (); ++i)
     if (!_variablesCollection[i]->isAssigned ())
-      return i;
+      return *(_variablesCollection[i]);
   throw ("Unreachable Code");
 }

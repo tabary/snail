@@ -1,27 +1,35 @@
-#include "Problem.h"
+#include "Problem.hh"
 
 using namespace std;
 
 Problem::Problem () { }
 
-void
-Problem::consolidate ()
+bool
+Problem::consolidateVariables ()
 {
-  for(int i=0;i< (int) _variablesCollection.size (); ++i){
-      _variablesCollection[i]->setIndex (i);
-    }
-  for(int i=0;i< (int) _constraintsCollection.size (); ++i){
-      _constraintsCollection[i]->consolidate (i);
-      if (_constraintsCollection.size () == 0 || minArity > _constraintsCollection[i]->getArity ())
-        minArity = _constraintsCollection[i]->getArity ();
-      if (_constraintsCollection.size () == 0 || maxArity < _constraintsCollection[i]->getArity ())
-        maxArity = _constraintsCollection[i]->getArity ();      
-    }
-  
-  cout << "Problem is consolidated" << endl;
+  for (size_t i(0); i < _variablesCollection.size(); ++i){
+    if (_variablesCollection[i] == NULL || _variablesCollection[i]->getIndex () != i)
+      return false;
+  }
+  return true;
 }
 
-
+bool
+Problem::consolidateConstraints ()
+{
+  for (size_t i(0); i < _constraintsCollection.size(); ++i){
+    if (_constraintsCollection[i] == NULL || _constraintsCollection[i]->getIndex () != i)
+      return false;
+    std::vector <Variable *> const &scope = _constraintsCollection[i]->getScope ();
+    for (size_t j(0); j < scope.size(); ++j)
+      scope[j]->addConstraint (_constraintsCollection[i]);
+    if (i == 0 || minArity > _constraintsCollection[i]->getArity ())
+        minArity = _constraintsCollection[i]->getArity ();
+      if (i == 0 || maxArity < _constraintsCollection[i]->getArity ())
+        maxArity = _constraintsCollection[i]->getArity ();      
+    }
+  return true;
+}
 
 void
 Problem::setName (const string &name)
@@ -30,15 +38,39 @@ Problem::setName (const string &name)
 }
 
 void
-Problem::addVariable (Variable *variable)
+Problem::addVariableAtIndex (Variable *variable,int index)
 {
-  _variablesCollection.push_back (variable);
+  assert(_variablesCollection[index]==NULL);
+  _variablesCollection[index] = variable;
 }
 
 void
-Problem::addConstraint (Constraint *constraint)
+Problem::initVariables (int nbVariables)
 {
-  _constraintsCollection.push_back (constraint);
+  assert(nbVariables >0);
+  _variablesCollection.resize (nbVariables,NULL);
+}
+
+void
+Problem::addConstraintAtIndex (Constraint *constraint, int index)
+{
+  assert(_constraintsCollection[index]==NULL);
+  _constraintsCollection[index] = constraint;
+}
+
+void
+Problem::initConstraints (int nbConstraints)
+{
+  assert(nbConstraints >0);
+  _constraintsCollection.resize (nbConstraints,NULL);
+}
+
+
+
+Variable &
+Problem::getVariable (int variableIndex) const
+{
+  return *(_variablesCollection[variableIndex]);
 }
 
 vector <Constraint *> const &
@@ -47,38 +79,32 @@ Problem::getConstraintsCollection () const
   return _constraintsCollection;
 }
 
-vector <Variable *> &
-Problem::getVariablesCollection ()
+vector <Variable *> const &
+Problem::getVariablesCollection () const
 {
   return _variablesCollection;
 }
 
-Variable &
-Problem::getVariable (int variableIndex) const
-{
-  return *(_variablesCollection[variableIndex]);
-}
-
-int
+unsigned int
 Problem::getNbVariables () const
 {
   return _variablesCollection.size ();
 }
 
-int
+unsigned int
 Problem::getNbConstraints () const
 {
   return _constraintsCollection.size ();
 }
 
-int
-Problem::getMinArity ()
+unsigned int
+Problem::getMinArity () const
 {
   return minArity;
 }
 
-int
-Problem::getMaxArity ()
+unsigned int
+Problem::getMaxArity () const
 {
   return maxArity;
 }
@@ -87,11 +113,10 @@ void
 Problem::display () const
 {
   cout << "************** DISPLAY PROBLEM " << _name << " ************" << endl;
-  for (unsigned int i = 0; i < _variablesCollection.size (); ++i)
-    {
-      cout << *(_variablesCollection[i]) << endl;
-    }
-  for (unsigned int i = 0; i < _constraintsCollection.size (); ++i)
+  for (size_t i = 0; i < _variablesCollection.size (); ++i)
+          cout << *(_variablesCollection[i]) << endl;
+  
+  for (size_t  i = 0; i < _constraintsCollection.size (); ++i)
     {
       cout << *(_constraintsCollection[i]) << endl;
     }

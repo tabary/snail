@@ -1,14 +1,14 @@
-#include "Dom.h"
+#include "Dom.hh"
 
 using namespace std;
 
-Dom::Dom (vector <Variable*> &variables) : VariableOrderingHeuristic (variables) { }
+Dom::Dom (vector <Variable*> const &variables) : VariableOrderingHeuristic (variables) { }
 
-int
-Dom::chooseVariable ()
+Variable &
+Dom::chooseVariable () const
 {
   int variableIndex = -1;
-  for (unsigned int i = 0; i < _variablesCollection.size (); ++i)
+  for (size_t i(0); i < _variablesCollection.size (); ++i)
     {
       if (_variablesCollection[i]->isAssigned ())
         continue;
@@ -16,5 +16,5 @@ Dom::chooseVariable ()
         variableIndex = i;
     }
   assert (variableIndex != -1);
-  return variableIndex;
+  return *(_variablesCollection[variableIndex]);
 }
