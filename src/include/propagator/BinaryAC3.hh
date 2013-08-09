@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <list>
+#include <algorithm>
 #include "Propagator.hh"
 
 /* For the moment the GAC3 class performs arc consisency with no optimizations

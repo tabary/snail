@@ -50,7 +50,8 @@ BinaryAC3::propagate (Variable* variable, unsigned int valueIndex, unsigned int 
                       propagationQueue.clear ();
                       return false;
                     }
-                  propagationQueue.push_back (&y);
+                  auto isAlreadyPresent = std::find(propagationQueue.begin(), propagationQueue.end(), &y);
+                  if (isAlreadyPresent == propagationQueue.end ()) propagationQueue.push_back (&y);
                 }
             }
         }
@@ -89,7 +90,6 @@ BinaryAC3::revise (Constraint& c, Variable& x, unsigned int depth)
   return domainSize != x.getDomain ().getNbCurrentValues ();
 }
 
-// TODO
 
 bool
 BinaryAC3::seekSupport (Constraint& c, Variable& x, unsigned int indexValue)
@@ -113,48 +113,7 @@ BinaryAC3::seekSupport (Constraint& c, Variable& x, unsigned int indexValue)
         tupleValue[i] = scope[i]->getDomain ().getValueOfIndex (tupleIndex[i]);
       }
 
-  unsigned int cpt (arity - 1);
-
-
-
-
-
-
-  //    while (!finished){
-  //      printTuple(t,arity);
-  //      //if (c.isValid(t))
-  //      //  return true;
-  //      
-  //      if (cpt == 0 && scope[cpt] == &x ){
-  //          finished = true;
-  //          break;}
-  //      if (scope[cpt] == &x ){
-  //         --cpt; 
-  //        continue;}
-  //      
-  //      int index = scope[cpt]->getDomain().getNextPresentIndexAfter(t[cpt]);
-  //      if (index!=-1){
-  //                t[cpt]=index;
-  //                continue;}
-  //      else{
-  //        do{  
-  //             if (cpt == 0){
-  //                  finished = true;
-  //                  break;}
-  //             cpt--;
-  //             if (scope[cpt] == &x)
-  //               continue;
-  //             index = scope[cpt]->getDomain().getNextPresentIndexAfter(t[cpt]);
-  //          }while(index == -1);
-  //        if (!finished){
-  //            t[cpt]=index;
-  //            for(unsigned int i(cpt+1); i <arity ; ++i)
-  //                  if (scope[i] != &x)
-  //                    t[i] = scope[i]->getDomain().getFirstPresentIndex();
-  //            cpt = arity -1;
-  //        }  
-  //      }  
-  //    }
+ unsigned int cpt (arity - 1);
 
   int index;
 
