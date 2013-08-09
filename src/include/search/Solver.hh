@@ -10,7 +10,7 @@
 
 #include "Propagator.hh"
 #include "BinaryForwardChecking.hh"
-//#include "binaryAC3.h"
+#include "binaryAC3.hh"
 
 #include "stack"
 #include <cassert>

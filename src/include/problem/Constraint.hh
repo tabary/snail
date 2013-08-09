@@ -20,8 +20,9 @@ private:
   std::string _name;
  
   Relation&  _relation;
-  snail::tuple myTuple; // temporary tuple
- 
+  snail::tuple myTupleValue; // temporary tuple
+  snail::tuple myTupleIndex; // temporary tuple
+  
   std::vector <Variable *> _scope;
   unsigned int _arity;
  
@@ -57,7 +58,8 @@ private:
 
   void addVariableToScope (Variable *variable);
 
-  const snail::tuple  &getMyTuple ();
+  const snail::tuple  &getMyTupleValue ();
+  const snail::tuple  &getMyTupleIndex ();
 
   friend std::ostream& operator<< (std::ostream &flux, const Constraint &constraint);
 };

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-BinaryForwardChecking::BinaryForwardChecking (int nbConstraints) : Propagator (nbConstraints) 
+BinaryForwardChecking::BinaryForwardChecking (unsigned int nbConstraints) : Propagator (nbConstraints) 
 {
 }
 
@@ -14,7 +14,7 @@ BinaryForwardChecking::initialize()
 }
 
 bool
-BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
+BinaryForwardChecking::propagate (Variable* variable, unsigned int valueIndex, unsigned int depth)
 {
   variableValue v;
 
@@ -29,7 +29,7 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
       
       vector<Variable *> const &scope = c.getScope ();
       int positionOfFutureVariableInScope;
-      const snail::tuple &t = c.getMyTuple ();
+      const snail::tuple &t = c.getMyTupleValue ();
 
       // Init of the tuple with the assigned variable and determine the index of the second variable (unassigned variable)
       if (scope[0]== variable)
@@ -72,7 +72,7 @@ BinaryForwardChecking::propagate (Variable* variable, int valueIndex, int depth)
 }
 
 void
-BinaryForwardChecking::undoPropagation (int depth)
+BinaryForwardChecking::undoPropagation (unsigned int depth)
 {
   variableValue v;
   while (!propagationStack.empty ())

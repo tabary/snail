@@ -17,10 +17,10 @@ class BinaryForwardChecking : public Propagator
 {
 public:
 
-  BinaryForwardChecking (int nbConstraints);
+  BinaryForwardChecking (unsigned int nbConstraints);
   
-  virtual bool propagate (Variable* variable, int valueIndex, int depth);
-  virtual void undoPropagation (int depth);
+  virtual bool propagate (Variable* variable, unsigned int valueIndex, unsigned int depth);
+  virtual void undoPropagation (unsigned int depth);
   virtual bool initialize();
 };
 

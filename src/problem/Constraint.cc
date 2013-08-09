@@ -5,7 +5,8 @@ using namespace std;
 Constraint::Constraint (const string &name, Relation &relation, int arity, int id) : _name (name), _relation (relation), _arity (arity), _nbUnassignedVariable (arity), _id(id) 
 {
   assert (_arity > 0);
-  myTuple=new int[_arity];
+  myTupleValue=new int[_arity];
+  myTupleIndex=new int[_arity];
  }
 
 unsigned int 
@@ -29,9 +30,9 @@ Constraint::isConsistent () const
         return false;
       if (!_scope[i]->isAssigned ())
         return true;
-      myTuple[i] = (_scope[i]->getDomain ()).getUniquePresentValue ();
+      myTupleValue[i] = (_scope[i]->getDomain ()).getUniquePresentValue ();
     }
-  if (isValid (myTuple))
+  if (isValid (myTupleValue))
     return true;
   return false;
 }
@@ -156,17 +157,24 @@ Constraint::addVariableToScope (Variable *variable)
 }
 
 const  snail::tuple &
-Constraint::getMyTuple ()
+Constraint::getMyTupleValue ()
 {
-  return myTuple;
+  return myTupleValue;
 }
+
+const  snail::tuple &
+Constraint::getMyTupleIndex ()
+{
+  return myTupleIndex;
+}
+
 
 ostream& operator<< (ostream &flux, const Constraint &constraint)
 {
   flux << constraint._name << " (id=" << constraint._id <<") [";
   for (size_t i(0); i < constraint._arity; ++i)
     {
-      flux << constraint._scope[i]->getName () << (i+1 == constraint._arity - 1 ? "" : ",");
+      flux << constraint._scope[i]->getName () << ( i+1 == constraint._arity  ? "" : ",");
     }
   flux << "] with relation " << constraint._relation ;
   return flux;

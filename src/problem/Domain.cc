@@ -119,32 +119,32 @@ Domain::isPresent (int i) const
   return (_currentDomain[i] == -1 ? true : false);
 }
 
-int
+unsigned int
 Domain::getNbRemovals () const
 {
   return _nbRemovals;
 }
 
-int
+unsigned int
 Domain::getNbInitialValues () const
 {
   return _initialDomain.size ();
 }
 
-int
+unsigned int
 Domain::getNbCurrentValues () const
 {
   return (_initialDomain.size () - _nbRemovals);
 }
 
 int
-Domain::getValueOfIndex (int index) const
+Domain::getValueOfIndex (unsigned int index) const
 {
-  assert (index < (int) _initialDomain.size () && index >= 0);
+  assert (index <  _initialDomain.size () && index >= 0);
   return _initialDomain[index];
 }
 
-int
+unsigned int
 Domain::getFirstPresentIndex () const
 {
   return _firstPresentIndex;
@@ -159,7 +159,7 @@ Domain::getUniquePresentValue () const
   return _initialDomain[_firstPresentIndex];
 }
 
-int
+unsigned int
 Domain::getUniquePresentIndex () const
 {
   assert (_nbRemovals == (int) _currentDomain.size () - 1);
@@ -169,8 +169,8 @@ Domain::getUniquePresentIndex () const
 }
 
 
-int
-Domain::getNextPresentIndexAfter(int index) const
+unsigned int
+Domain::getNextPresentIndexAfter(unsigned int index) const
 {
   assert(_currentDomain[index] == -1);
   return _forwardCurrentDomain[index];
