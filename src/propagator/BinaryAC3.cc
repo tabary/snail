@@ -7,19 +7,21 @@ BinaryAC3::BinaryAC3 (unsigned int nbConstraints) : Propagator (nbConstraints) {
 bool
 BinaryAC3::initialize ()
 {
+  
+  
+  
+  
+  
   return true;
 }
 
 bool
-BinaryAC3::propagate (Variable* variable, unsigned int valueIndex, unsigned int depth)
+BinaryAC3::propagate (std::vector <Variable*> variablesEvt, unsigned int valueIndex, unsigned int depth)
 {
   assert (propagationQueue.empty ());
 
-
-  //     
-  //     seekSupport(*(involvedConstraints[0]),*variable,valueIndex);
-
-  propagationQueue.push_front (variable);
+  for(size_t i(0); i<variablesEvt.size (); ++i)
+            propagationQueue.push_front (variablesEvt[i]);
 
   while (!propagationQueue.empty ())
     {
@@ -36,7 +38,7 @@ BinaryAC3::propagate (Variable* variable, unsigned int valueIndex, unsigned int 
 
           for (size_t j (0); j < scope.size (); ++j)
             {
-              if (scope[j] == &v)
+              if (scope[j] == &v || scope[j]->isAssigned ())
                 continue;
               Variable& y = *(scope[j]);
               if (revise (c, y, depth))

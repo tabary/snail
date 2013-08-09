@@ -15,8 +15,7 @@ export CC = ~/tools/bin/g++
 #standard options
 #export OPT =-g -DTMPDEBUG  
 #debug options
-export OPT=-g -DTMPDEBUG -DSHOWPROBLEM 
-#-DTRACE
+export OPT=-g -DTMPDEBUG -DSHOWPROBLEM -DTRACE
 #competition options
 #export OPT=-O3 -DNDEBUG
 

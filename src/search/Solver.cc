@@ -77,7 +77,7 @@ Solver::undoRefutation (unsigned int variableIndex, unsigned int valueIndex, uns
 bool
 Solver::checkConsistencyAfterAssignement (unsigned int variableIndex, unsigned int valueIndex, unsigned int depth)
 {
- return _propagator->propagate (&(_problem.getVariable (variableIndex)), valueIndex, depth);
+ return _propagator->propagate ({&(_problem.getVariable (variableIndex))}, valueIndex, depth);
  //return checkConsistency(variableIndex,valueIndex,depth);
  
 }
@@ -106,6 +106,9 @@ Solver::doSearch ()
 
   Variable::setNbAssigned (0);
 
+  if (_propagator->initialize ()==false)
+    fullExploration=true;
+  
   while (!fullExploration)
     {
       

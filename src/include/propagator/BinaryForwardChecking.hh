@@ -19,7 +19,7 @@ public:
 
   BinaryForwardChecking (unsigned int nbConstraints);
   
-  virtual bool propagate (Variable* variable, unsigned int valueIndex, unsigned int depth);
+  virtual bool propagate (std::vector <Variable*> variablesEvt, unsigned int valueIndex, unsigned int depth);
   virtual void undoPropagation (unsigned int depth);
   virtual bool initialize();
 };

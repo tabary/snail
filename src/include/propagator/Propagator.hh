@@ -32,7 +32,7 @@ Propagator (unsigned int nbConstraints);
 
 void dealWith(Constraint *c);
 
-virtual bool propagate (Variable* variable, unsigned int valueIndex, unsigned int depth) = 0;
+virtual bool propagate (std::vector <Variable*> variablesEvt, unsigned int valueIndex, unsigned int depth) = 0;
 virtual void undoPropagation (unsigned int depth) = 0;
   
 virtual bool initialize() = 0;

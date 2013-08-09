@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <list>
+
 #include <algorithm>
 #include "Propagator.hh"
 
@@ -26,7 +27,7 @@ private:
 public:
   BinaryAC3 (unsigned int nbConstraints);
   bool seekSupport (Constraint& c, Variable& x, unsigned int indexValue);
-  virtual bool propagate (Variable* variable, unsigned int valueIndex, unsigned int depth);
+  virtual bool propagate (std::vector <Variable*> variablesEvt, unsigned int valueIndex, unsigned int depth);
   virtual void undoPropagation (unsigned int depth);
   virtual bool initialize ();
 };

@@ -14,10 +14,13 @@ BinaryForwardChecking::initialize()
 }
 
 bool
-BinaryForwardChecking::propagate (Variable* variable, unsigned int valueIndex, unsigned int depth)
+BinaryForwardChecking::propagate (std::vector <Variable*> variablesEvt, unsigned int valueIndex, unsigned int depth)
 {
   variableValue v;
 
+  assert(variablesEvt.size() == 1);
+  Variable *variable=variablesEvt[0];
+  
   vector <Constraint *> const & involvedConstraints = variable->getInvolvedConstraints ();
   for (size_t i(0); i < involvedConstraints.size (); ++i)
     {
