@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Propagator::Propagator (int nbConstraints) 
+Propagator::Propagator (unsigned int nbConstraints) 
 {
   assert(nbConstraints > 0);
   _recordedConstraints = new bool [nbConstraints];

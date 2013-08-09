@@ -20,20 +20,20 @@ protected:
   typedef struct
   {
     Variable* variable;
-    int valueIndex;
-    int depth;
+    unsigned int valueIndex;
+    unsigned int depth;
   } variableValue;
   std::stack<variableValue> propagationStack;
 
 
 public:
   
-Propagator (int nbConstraints);
+Propagator (unsigned int nbConstraints);
 
 void dealWith(Constraint *c);
 
-virtual bool propagate (Variable* variable, int valueIndex, int depth) = 0;
-virtual void undoPropagation (int depth) = 0;
+virtual bool propagate (Variable* variable, unsigned int valueIndex, unsigned int depth) = 0;
+virtual void undoPropagation (unsigned int depth) = 0;
   
 virtual bool initialize() = 0;
 };

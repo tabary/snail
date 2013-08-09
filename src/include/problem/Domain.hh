@@ -45,17 +45,17 @@ public:
 
   bool isPresent (int i) const;
 
-  int getNbRemovals () const;
-  int getNbInitialValues () const;
-  int getNbCurrentValues () const;
+  unsigned int getNbRemovals () const;
+  unsigned int getNbInitialValues () const;
+  unsigned int getNbCurrentValues () const;
 
-  int getValueOfIndex (int index) const;
-  int getFirstPresentIndex () const;
+  int getValueOfIndex (unsigned int index) const;
+  unsigned int getFirstPresentIndex () const;
   int getUniquePresentValue () const;
-  int getUniquePresentIndex () const;
+  unsigned int getUniquePresentIndex () const;
   
   
-  int getNextPresentIndexAfter(int index) const;
+  unsigned int getNextPresentIndexAfter(unsigned int index) const;
 
   void reduceToIndexAtDepth (int valueIndex, int depth);
   void removeIndexAtDepth (int valueIndex, int depth);

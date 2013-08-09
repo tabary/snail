@@ -3,31 +3,31 @@
 
 
 #include <cassert>
-
-#include "Propagator.h"
-#include "list"
+#include <list>
+#include "Propagator.hh"
 
 /* For the moment the GAC3 class performs arc consisency with no optimizations
     See the definition of Mackworth77
- 
-    NON BINARY CONSTRAINTS ARE SKIPPED 
-
  */
 
 class BinaryAC3 : public Propagator
 {
-  private:
-    std::list<Variable*> propagationQueue;
-    
-    bool revise(Constraint& c,Variable& x, int depth);
-    bool seekSupport(Constraint& c,Variable& x, int indexValue);
-    
-    public:
-      BinaryAC3 (int nbConstraints);
-      
-      virtual bool propagate (Variable* variable, int valueIndex, int depth);
-      virtual void undoPropagation (int depth);
-      virtual bool initialize() ;
+private:
+  std::list<Variable*> propagationQueue;
+
+  bool revise (Constraint& c, Variable& x, unsigned int depth);
+  //  bool seekSupport(Constraint& c,Variable& x, unsigned int indexValue);
+
+
+
+  void printTuple (const snail::tuple &t, int arity);
+
+public:
+  BinaryAC3 (unsigned int nbConstraints);
+  bool seekSupport (Constraint& c, Variable& x, unsigned int indexValue);
+  virtual bool propagate (Variable* variable, unsigned int valueIndex, unsigned int depth);
+  virtual void undoPropagation (unsigned int depth);
+  virtual bool initialize ();
 };
 
 #endif
